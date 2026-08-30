@@ -18,6 +18,8 @@ The editor action creates the first exterior world shell, a third-person player,
 
 The eight landmarks are a map of future XIV spaces, not a promise to build eight full districts immediately. The first production milestone is the Green Gate to Archive Garden walking route.
 
+The generated world also includes `XIVAudioAtmosphere`. Assign a local Unity `AudioClip` to its `AudioSource` or call `SetMusic` from a future media selector; the clip is analyzed locally and only its energy is sent to the world lighting. Audio files should stay outside Git.
+
 ## Local API
 
 Run `quant-live green-machine-serve` after setting `GREEN_MACHINE_API_TOKEN`. Set the same token only in local Unity editor settings before running a data-connected scene; do not save it in a project asset or commit it.

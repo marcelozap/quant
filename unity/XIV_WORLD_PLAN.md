@@ -86,6 +86,8 @@ These are destinations, not dashboard panels pasted into a game. The world shoul
 
 **Gate:** a screenshot of Green Gate is recognizable as XIV without relying on a debug label.
 
+The current builder already creates the route blockout, Rosco interest points, and a local `XIVAudioAtmosphere` component. These are foundations for the gates below, not evidence that the final art or audio experience is complete.
+
 ### Month 5: the complete walk
 
 - Build the Green Gate to Archive Garden route as one authored experience.

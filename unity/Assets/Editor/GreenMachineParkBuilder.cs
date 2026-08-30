@@ -34,6 +34,7 @@ namespace GreenMachine.Editor
             CreatePlayer();
             CreateRosco();
             CreateWorldController();
+            CreateAudioAtmosphere();
             CreateFastTravel();
             EditorSceneManager.SaveScene(scene, "Assets/Scenes/XIVWorld.unity");
             Selection.activeGameObject = GameObject.Find("Marcelo");
@@ -157,6 +158,21 @@ namespace GreenMachine.Editor
             ParkWorldController controller = world.AddComponent<ParkWorldController>();
             SerializedObject serialized = new SerializedObject(controller);
             serialized.FindProperty("sun").objectReferenceValue = Object.FindFirstObjectByType<Light>();
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void CreateAudioAtmosphere()
+        {
+            GameObject audio = new GameObject("XIV Audio Atmosphere");
+            AudioSource source = audio.AddComponent<AudioSource>();
+            source.playOnAwake = false;
+            source.loop = true;
+            source.spatialBlend = 0f;
+
+            XIVAudioAtmosphere atmosphere = audio.AddComponent<XIVAudioAtmosphere>();
+            SerializedObject serialized = new SerializedObject(atmosphere);
+            serialized.FindProperty("musicSource").objectReferenceValue = source;
+            serialized.FindProperty("worldController").objectReferenceValue = Object.FindFirstObjectByType<ParkWorldController>();
             serialized.ApplyModifiedPropertiesWithoutUndo();
         }
 
