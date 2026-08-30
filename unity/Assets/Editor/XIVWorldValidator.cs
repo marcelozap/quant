@@ -33,6 +33,9 @@ namespace GreenMachine.Editor
             Check(GameObject.Find("Green Gate") != null, "Green Gate exists", ref passed, ref failed);
             Check(GameObject.Find("Archive Garden")?.GetComponent<XIVWalkDestination>() != null, "Archive Garden completes the walk", ref passed, ref failed);
             Check(GameObject.Find("Green Gate to Archive Garden Route") != null, "First walking route exists", ref passed, ref failed);
+            GameObject route = GameObject.Find("Green Gate to Archive Garden Route");
+            int routeDiscoveries = route == null ? 0 : route.GetComponentsInChildren<RoscoInterestPoint>(true).Length;
+            Check(routeDiscoveries >= 3, "First route has at least three Rosco discoveries", ref passed, ref failed);
             Check(GameObject.Find("XIV Audio Atmosphere")?.GetComponent<XIVAudioAtmosphere>() != null, "Audio atmosphere exists", ref passed, ref failed);
             Check(GameObject.Find("XIV Audio Atmosphere")?.GetComponent<AudioSource>() != null, "Audio source exists", ref passed, ref failed);
             Check(GameObject.Find("XIV Walk Session")?.GetComponent<XIVWalkSession>() != null, "Walk session exists", ref passed, ref failed);
