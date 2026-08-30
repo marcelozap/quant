@@ -18,7 +18,7 @@ namespace GreenMachine.Editor
             ("Tape Tunnel", new Vector3(-22f, 0f, -20f), new Color(0.65f, 0.39f, 1f)),
             ("Signal Square", new Vector3(3f, 0f, 31f), new Color(1f, 0.71f, 0.24f)),
             ("Account Observatory", new Vector3(-37f, 0f, -2f), new Color(0.42f, 0.6f, 0.96f)),
-            ("Archive Garden", new Vector3(16f, 0f, -34f), new Color(0.96f, 0.56f, 0.76f)),
+            ("Archive Garden", new Vector3(16f, 0f, 34f), new Color(0.96f, 0.56f, 0.76f)),
         };
 
         [MenuItem("XIV/Create First Playable World")]
@@ -50,11 +50,11 @@ namespace GreenMachine.Editor
             GameObject route = new GameObject("Green Gate to Archive Garden Route");
             Vector3[] waypoints =
             {
-                new Vector3(0f, 0f, -5f),
-                new Vector3(3f, 0f, -12f),
-                new Vector3(10f, 0f, -22f),
-                new Vector3(16f, 0f, -30f),
-                new Vector3(16f, 0f, -34f),
+                new Vector3(0f, 0f, 5f),
+                new Vector3(3f, 0f, 12f),
+                new Vector3(10f, 0f, 22f),
+                new Vector3(16f, 0f, 30f),
+                new Vector3(16f, 0f, 34f),
             };
 
             for (int i = 0; i < waypoints.Length - 1; i++)
@@ -62,22 +62,22 @@ namespace GreenMachine.Editor
                 CreatePathSegment(route.transform, waypoints[i], waypoints[i + 1]);
             }
 
-            CreateInterestPoint(route.transform, "Wind chime", new Vector3(3f, 0.3f, -12f), new Color(1f, 0.7f, 0.28f));
-            CreateInterestPoint(route.transform, "Garden light", new Vector3(10f, 0.3f, -22f), new Color(0.36f, 0.86f, 0.72f));
-            CreateInterestPoint(route.transform, "Archive marker", new Vector3(16f, 0.3f, -30f), new Color(0.95f, 0.56f, 0.76f));
+            CreateInterestPoint(route.transform, "Wind chime", new Vector3(3f, 0.3f, 12f), new Color(1f, 0.7f, 0.28f));
+            CreateInterestPoint(route.transform, "Garden light", new Vector3(10f, 0.3f, 22f), new Color(0.36f, 0.86f, 0.72f));
+            CreateInterestPoint(route.transform, "Archive marker", new Vector3(16f, 0.3f, 30f), new Color(0.95f, 0.56f, 0.76f));
             CreateRouteDressing(route.transform);
         }
 
         private static void CreateRouteDressing(Transform parent)
         {
-            CreateTree(parent, "Route Tree A", new Vector3(-1.2f, 0f, -13.5f), 0.95f);
-            CreateTree(parent, "Route Tree B", new Vector3(6.7f, 0f, -15f), 1.1f);
-            CreateTree(parent, "Route Tree C", new Vector3(6.8f, 0f, -24.5f), 0.85f);
-            CreateTree(parent, "Route Tree D", new Vector3(13.5f, 0f, -25f), 1.15f);
+            CreateTree(parent, "Route Tree A", new Vector3(-1.2f, 0f, 13.5f), 0.95f);
+            CreateTree(parent, "Route Tree B", new Vector3(6.7f, 0f, 15f), 1.1f);
+            CreateTree(parent, "Route Tree C", new Vector3(6.8f, 0f, 24.5f), 0.85f);
+            CreateTree(parent, "Route Tree D", new Vector3(13.5f, 0f, 25f), 1.15f);
 
-            CreateRouteLantern(parent, "Route Lantern A", new Vector3(1.1f, 0f, -9f));
-            CreateRouteLantern(parent, "Route Lantern B", new Vector3(8.1f, 0f, -18f));
-            CreateRouteLantern(parent, "Route Lantern C", new Vector3(14.3f, 0f, -27f));
+            CreateRouteLantern(parent, "Route Lantern A", new Vector3(1.1f, 0f, 9f));
+            CreateRouteLantern(parent, "Route Lantern B", new Vector3(8.1f, 0f, 18f));
+            CreateRouteLantern(parent, "Route Lantern C", new Vector3(14.3f, 0f, 27f));
         }
 
         private static void CreateTree(Transform parent, string name, Vector3 position, float scale)
