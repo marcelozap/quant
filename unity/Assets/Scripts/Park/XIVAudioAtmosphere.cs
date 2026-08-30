@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace GreenMachine.Park
 {
@@ -55,6 +57,9 @@ namespace GreenMachine.Park
 
             string analysisPath = Environment.GetEnvironmentVariable("XIV_AUDIO_ANALYSIS_PATH");
             if (!string.IsNullOrWhiteSpace(analysisPath)) LoadAnalysisFile(analysisPath);
+
+            string audioPath = Environment.GetEnvironmentVariable("XIV_AUDIO_PATH");
+            if (!string.IsNullOrWhiteSpace(audioPath)) LoadMusicFile(audioPath);
         }
 
         public void SetMusic(AudioClip clip)
@@ -74,6 +79,11 @@ namespace GreenMachine.Park
         public void StopMusic()
         {
             if (musicSource != null) musicSource.Stop();
+        }
+
+        public void LoadMusicFile(string path)
+        {
+            if (!string.IsNullOrWhiteSpace(path)) StartCoroutine(LoadMusicFileRoutine(path));
         }
 
         public void SetBeatGrid(float bpm, float offsetSeconds = 0f)
@@ -153,6 +163,30 @@ namespace GreenMachine.Park
             }
 
             return Mathf.Clamp01(Mathf.Sqrt(sumSquares / outputSamples.Length) * energyScale);
+        }
+
+        private IEnumerator LoadMusicFileRoutine(string path)
+        {
+            if (musicSource == null || !File.Exists(path)) yield break;
+
+            using UnityWebRequest request = UnityWebRequestMultimedia.GetAudioClip(
+                new Uri(path).AbsoluteUri,
+                AudioTypeFor(path));
+            yield return request.SendWebRequest();
+            if (request.result != UnityWebRequest.Result.Success) yield break;
+
+            AudioClip clip = DownloadHandlerAudioClip.GetContent(request);
+            if (clip != null) SetMusic(clip);
+        }
+
+        private static AudioType AudioTypeFor(string path)
+        {
+            return Path.GetExtension(path).ToLowerInvariant() switch
+            {
+                ".wav" => AudioType.WAV,
+                ".ogg" => AudioType.OGGVORBIS,
+                _ => AudioType.MPEG,
+            };
         }
 
         private void ApplyLightResponse()
