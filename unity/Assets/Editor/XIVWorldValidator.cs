@@ -89,6 +89,7 @@ namespace GreenMachine.Editor
             Check(routeMotionProps >= 3, "First route has audio-reactive motion props", ref passed, ref failed);
             Check(GameObject.Find("XIV Audio Atmosphere")?.GetComponent<XIVAudioAtmosphere>() != null, "Audio atmosphere exists", ref passed, ref failed);
             Check(GameObject.Find("XIV Audio Atmosphere")?.GetComponent<AudioSource>() != null, "Audio source exists", ref passed, ref failed);
+            Check(GameObject.Find("XIV Pause Controller")?.GetComponent<XIVPauseController>() != null, "Private pause controller exists", ref passed, ref failed);
             Check(GameObject.Find("XIV Walk Session")?.GetComponent<XIVWalkSession>() != null, "Walk session exists", ref passed, ref failed);
             Check(GameObject.Find("XIV Walk Guide")?.GetComponent<XIVWalkGuide>()?.IsConfigured == true, "First walk guide is configured", ref passed, ref failed);
             Check(GameObject.Find("Park World Controller")?.GetComponent<ParkWorldController>() != null, "World controller exists", ref passed, ref failed);

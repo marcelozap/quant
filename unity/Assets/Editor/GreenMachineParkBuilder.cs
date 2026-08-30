@@ -43,6 +43,7 @@ namespace GreenMachine.Editor
             CreateRosco();
             CreateWorldController();
             CreateAudioAtmosphere();
+            CreatePauseController();
             CreateWalkSession();
             CreateWalkGuide();
             CreateGreenMachineBoard();
@@ -570,6 +571,12 @@ namespace GreenMachine.Editor
             serialized.FindProperty("musicSource").objectReferenceValue = source;
             serialized.FindProperty("worldController").objectReferenceValue = Object.FindFirstObjectByType<ParkWorldController>();
             serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void CreatePauseController()
+        {
+            GameObject pause = new GameObject("XIV Pause Controller");
+            pause.AddComponent<XIVPauseController>();
         }
 
         private static void CreateWalkSession()
