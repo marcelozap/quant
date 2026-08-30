@@ -1,12 +1,14 @@
-"""Create the first original Green Machine landmark in Blender 5.2+."""
+"""Create and export the first original XIV landmark in Blender 5.2+."""
 
 import bpy
 import math
+import os
 from mathutils import Vector
 
 
 OUTPUT_BLEND = "unity/Assets/Art/Source/GreenGate.blend"
 OUTPUT_RENDER = "unity/Assets/Art/Previews/green_gate.png"
+OUTPUT_FBX = "unity/Assets/Art/Exports/GreenGate.fbx"
 
 
 def material(name, color, metallic=0.0, roughness=0.5, emission=None):
@@ -160,7 +162,13 @@ def main():
     bpy.ops.object.delete(use_global=False)
     build_gate()
     configure_render()
+    os.makedirs(os.path.dirname(OUTPUT_FBX), exist_ok=True)
     bpy.ops.wm.save_as_mainfile(filepath=OUTPUT_BLEND)
+    bpy.ops.export_scene.fbx(
+        filepath=OUTPUT_FBX,
+        use_selection=False,
+        apply_scale_options="FBX_SCALE_ALL",
+    )
     bpy.ops.render.render(write_still=True)
 
 
