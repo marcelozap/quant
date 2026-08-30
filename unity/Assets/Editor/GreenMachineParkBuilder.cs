@@ -65,6 +65,39 @@ namespace GreenMachine.Editor
             CreateInterestPoint(route.transform, "Wind chime", new Vector3(3f, 0.3f, -12f), new Color(1f, 0.7f, 0.28f));
             CreateInterestPoint(route.transform, "Garden light", new Vector3(10f, 0.3f, -22f), new Color(0.36f, 0.86f, 0.72f));
             CreateInterestPoint(route.transform, "Archive marker", new Vector3(16f, 0.3f, -30f), new Color(0.95f, 0.56f, 0.76f));
+            CreateRouteDressing(route.transform);
+        }
+
+        private static void CreateRouteDressing(Transform parent)
+        {
+            CreateTree(parent, "Route Tree A", new Vector3(-1.2f, 0f, -13.5f), 0.95f);
+            CreateTree(parent, "Route Tree B", new Vector3(6.7f, 0f, -15f), 1.1f);
+            CreateTree(parent, "Route Tree C", new Vector3(6.8f, 0f, -24.5f), 0.85f);
+            CreateTree(parent, "Route Tree D", new Vector3(13.5f, 0f, -25f), 1.15f);
+
+            CreateRouteLantern(parent, "Route Lantern A", new Vector3(1.1f, 0f, -9f));
+            CreateRouteLantern(parent, "Route Lantern B", new Vector3(8.1f, 0f, -18f));
+            CreateRouteLantern(parent, "Route Lantern C", new Vector3(14.3f, 0f, -27f));
+        }
+
+        private static void CreateTree(Transform parent, string name, Vector3 position, float scale)
+        {
+            GameObject tree = new GameObject(name);
+            tree.transform.SetParent(parent);
+            tree.transform.localPosition = position;
+            tree.transform.localScale = Vector3.one * scale;
+            CreatePart(PrimitiveType.Cylinder, "Tree Trunk", tree.transform, new Vector3(0f, 1.1f, 0f), new Vector3(0.32f, 1.1f, 0.32f), new Color(0.28f, 0.12f, 0.06f));
+            CreatePart(PrimitiveType.Sphere, "Tree Canopy", tree.transform, new Vector3(0f, 2.7f, 0f), new Vector3(1.35f, 1.7f, 1.35f), new Color(0.12f, 0.42f, 0.27f));
+        }
+
+        private static void CreateRouteLantern(Transform parent, string name, Vector3 position)
+        {
+            GameObject lantern = new GameObject(name);
+            lantern.transform.SetParent(parent);
+            lantern.transform.localPosition = position;
+            CreatePart(PrimitiveType.Cylinder, "Lantern Post", lantern.transform, new Vector3(0f, 1.2f, 0f), new Vector3(0.12f, 1.2f, 0.12f), new Color(0.08f, 0.1f, 0.13f));
+            CreatePart(PrimitiveType.Sphere, "Lantern", lantern.transform, new Vector3(0f, 2.45f, 0f), new Vector3(0.3f, 0.42f, 0.3f), new Color(1f, 0.66f, 0.24f));
+            CreatePointLight(lantern.transform, "Route Glow", new Vector3(0f, 2.45f, 0f), new Color(1f, 0.48f, 0.2f));
         }
 
         private static void CreatePathSegment(Transform parent, Vector3 start, Vector3 end)
