@@ -1,9 +1,18 @@
+using System;
+using System.IO;
 using UnityEngine;
 
 namespace GreenMachine.Park
 {
     public sealed class XIVAudioAtmosphere : MonoBehaviour
     {
+        [Serializable]
+        private sealed class AudioAnalysisV1Document
+        {
+            public float bpm;
+            public float[] beat_times;
+        }
+
         [SerializeField] private AudioSource musicSource;
         [SerializeField] private ParkWorldController worldController;
         [SerializeField] [Range(0f, 1f)] private float fallbackEnergy = 0.14f;
@@ -24,6 +33,7 @@ namespace GreenMachine.Park
 
         public float CurrentEnergy => currentEnergy;
         public float CurrentBeatPulse { get; private set; }
+        public bool HasBeatGrid => beatBpm > 0f;
 
         private void Update()
         {
@@ -42,6 +52,9 @@ namespace GreenMachine.Park
             Light[] allLights = FindObjectsByType<Light>(FindObjectsSortMode.None);
             reactiveLights = System.Array.FindAll(allLights, light =>
                 light != null && (light.name.Contains("Glow") || light.name.Contains("Beacon")));
+
+            string analysisPath = Environment.GetEnvironmentVariable("XIV_AUDIO_ANALYSIS_PATH");
+            if (!string.IsNullOrWhiteSpace(analysisPath)) LoadAnalysisFile(analysisPath);
         }
 
         public void SetMusic(AudioClip clip)
@@ -67,6 +80,67 @@ namespace GreenMachine.Park
         {
             beatBpm = Mathf.Clamp(bpm, 0f, 300f);
             beatOffsetSeconds = offsetSeconds;
+        }
+
+        public bool LoadAnalysisFile(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path)) return false;
+
+            try
+            {
+                return LoadAnalysisJson(File.ReadAllText(path));
+            }
+            catch (IOException)
+            {
+                ClearBeatGrid();
+                return false;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                ClearBeatGrid();
+                return false;
+            }
+        }
+
+        public bool LoadAnalysisJson(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json)) return false;
+
+            try
+            {
+                AudioAnalysisV1Document document = JsonUtility.FromJson<AudioAnalysisV1Document>(json);
+                if (document == null || document.bpm < 20f || document.bpm > 300f || document.beat_times == null || document.beat_times.Length == 0)
+                {
+                    ClearBeatGrid();
+                    return false;
+                }
+
+                float previous = -1f;
+                foreach (float beatTime in document.beat_times)
+                {
+                    if (beatTime < 0f || beatTime <= previous)
+                    {
+                        ClearBeatGrid();
+                        return false;
+                    }
+                    previous = beatTime;
+                }
+
+                SetBeatGrid(document.bpm, document.beat_times[0]);
+                return true;
+            }
+            catch (ArgumentException)
+            {
+                ClearBeatGrid();
+                return false;
+            }
+        }
+
+        public void ClearBeatGrid()
+        {
+            beatBpm = 0f;
+            beatOffsetSeconds = 0f;
+            CurrentBeatPulse = 0f;
         }
 
         private float ReadMusicEnergy()

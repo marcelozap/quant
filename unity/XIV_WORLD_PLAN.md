@@ -177,6 +177,7 @@ The first year uses these boundaries:
 - MaloSound owns music and audio-derived artifacts.
 - The local adapter passes only the minimum read-only, validated data the world needs.
 - Beat timing is optional and explicit: XIV receives a BPM and offset from MaloSound or a reviewed local artifact; it never silently invents a beat grid.
+- The first audio integration accepts MaloSound's `AudioAnalysisV1` `bpm` and monotonic `beat_times` fields directly; invalid documents clear the beat grid and leave energy response available.
 - Credentials, private history, and tokens never live in Unity assets, builds, screenshots, or commits.
 
 ## Quality bar
