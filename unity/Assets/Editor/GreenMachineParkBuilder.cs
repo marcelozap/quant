@@ -37,6 +37,7 @@ namespace GreenMachine.Editor
             CreateAudioAtmosphere();
             CreateWalkSession();
             CreateFastTravel();
+            if (!AssetDatabase.IsValidFolder("Assets/Scenes")) AssetDatabase.CreateFolder("Assets", "Scenes");
             EditorSceneManager.SaveScene(scene, "Assets/Scenes/XIVWorld.unity");
             Selection.activeGameObject = GameObject.Find("Marcelo");
         }

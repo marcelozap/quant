@@ -16,6 +16,8 @@ The full 12-month direction lives in [`XIV_WORLD_PLAN.md`](./XIV_WORLD_PLAN.md).
 
 The editor action creates the first exterior world shell, a third-person player, a Rosco placeholder companion, lighting, and eight named landmarks. It does not store data or secrets in Unity.
 
+Use `WASD` or the arrow keys to walk. A left click on the ground sets a temporary walk destination. The first generated scene is a systems blockout, so the player and Rosco are intentionally placeholders while the route and behavior are being tested.
+
 The eight landmarks are a map of future XIV spaces, not a promise to build eight full districts immediately. The first production milestone is the Green Gate to Archive Garden walking route.
 
 The generated world also includes `XIVAudioAtmosphere` and `XIVWalkSession`. Assign a local Unity `AudioClip` to its `AudioSource` or call `SetMusic` from a future media selector; the clip is analyzed locally and only its energy is sent to the world lighting. Walk summaries are autosaved to the Mac's application data directory. Audio files, session saves, and private data should stay outside Git.

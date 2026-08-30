@@ -65,6 +65,7 @@ These are destinations, not dashboard panels pasted into a game. The world shoul
 - Support walking, running, stopping, turning, camera orbit, camera collision, and a comfortable follow distance.
 - Add animation state hooks even while the first character remains a placeholder.
 - Make the route navigable without fast travel.
+- Keep input on Unity's Input System so the Mac build does not depend on legacy input settings.
 
 **Gate:** movement feels good for ten minutes with no camera fighting, visible jitter, or accidental falling through the world.
 

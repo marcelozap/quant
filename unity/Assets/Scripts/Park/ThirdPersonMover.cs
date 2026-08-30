@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace GreenMachine.Park
 {
@@ -8,24 +9,27 @@ namespace GreenMachine.Park
         [SerializeField] private Transform cameraTransform;
         [SerializeField] private float moveSpeed = 5.5f;
         [SerializeField] private float turnSpeed = 12f;
+        [SerializeField] private float acceleration = 24f;
+        [SerializeField] private float deceleration = 30f;
 
         private Vector3 clickDestination;
         private bool hasClickDestination;
 
         private CharacterController controller;
         private Vector3 velocity;
+        private Vector3 planarVelocity;
 
         private void Awake() => controller = GetComponent<CharacterController>();
 
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0) && TrySetClickDestination()) hasClickDestination = true;
-            float horizontal = Input.GetAxisRaw("Horizontal");
-            float vertical = Input.GetAxisRaw("Vertical");
-            Vector3 input = new Vector3(horizontal, 0f, vertical).normalized;
-            Vector3 forward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized;
-            Vector3 right = Vector3.ProjectOnPlane(cameraTransform.right, Vector3.up).normalized;
-            Vector3 movement = (forward * input.z + right * input.x).normalized;
+            if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame && TrySetClickDestination())
+            {
+                hasClickDestination = true;
+            }
+
+            Vector2 input = ReadKeyboardInput();
+            Vector3 movement = CameraRelativeMovement(input);
 
             if (input.sqrMagnitude > 0.001f) hasClickDestination = false;
             if (hasClickDestination)
@@ -36,23 +40,51 @@ namespace GreenMachine.Park
                 else movement = toDestination.normalized;
             }
 
-            if (movement.sqrMagnitude > 0.001f)
+            Vector3 desiredVelocity = movement * moveSpeed;
+            float response = movement.sqrMagnitude > 0.001f ? acceleration : deceleration;
+            planarVelocity = Vector3.MoveTowards(planarVelocity, desiredVelocity, response * Time.deltaTime);
+
+            if (planarVelocity.sqrMagnitude > 0.001f)
             {
-                transform.forward = Vector3.Slerp(transform.forward, movement, turnSpeed * Time.deltaTime);
-                controller.Move(movement * moveSpeed * Time.deltaTime);
+                Vector3 facing = planarVelocity.normalized;
+                transform.forward = Vector3.Slerp(transform.forward, facing, turnSpeed * Time.deltaTime);
             }
 
             velocity.y += Physics.gravity.y * Time.deltaTime;
             if (controller.isGrounded && velocity.y < 0f) velocity.y = -2f;
-            controller.Move(velocity * Time.deltaTime);
+            controller.Move((planarVelocity + velocity) * Time.deltaTime);
         }
 
         private bool TrySetClickDestination()
         {
-            Ray ray = cameraTransform.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+            Camera camera = cameraTransform != null ? cameraTransform.GetComponent<Camera>() : null;
+            if (camera == null || Mouse.current == null) return false;
+
+            Ray ray = camera.ScreenPointToRay(Mouse.current.position.ReadValue());
             if (!Physics.Raycast(ray, out RaycastHit hit, 250f)) return false;
             clickDestination = hit.point;
             return true;
+        }
+
+        private Vector2 ReadKeyboardInput()
+        {
+            if (Keyboard.current == null) return Vector2.zero;
+
+            Vector2 input = Vector2.zero;
+            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) input.x -= 1f;
+            if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) input.x += 1f;
+            if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) input.y -= 1f;
+            if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) input.y += 1f;
+            return Vector2.ClampMagnitude(input, 1f);
+        }
+
+        private Vector3 CameraRelativeMovement(Vector2 input)
+        {
+            if (cameraTransform == null || input.sqrMagnitude <= 0.001f) return Vector3.zero;
+
+            Vector3 forward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized;
+            Vector3 right = Vector3.ProjectOnPlane(cameraTransform.right, Vector3.up).normalized;
+            return (forward * input.y + right * input.x).normalized;
         }
     }
 }
