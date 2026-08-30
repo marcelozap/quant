@@ -8,8 +8,10 @@ namespace GreenMachine.Park
     {
         [SerializeField] private Transform cameraTransform;
         [SerializeField] private float moveSpeed = 5.5f;
+        [SerializeField] private float runSpeed = 8f;
         [SerializeField] private float turnSpeed = 12f;
         [SerializeField] private float acceleration = 24f;
+        [SerializeField] private float runAcceleration = 32f;
         [SerializeField] private float deceleration = 30f;
 
         private Vector3 clickDestination;
@@ -18,6 +20,9 @@ namespace GreenMachine.Park
         private CharacterController controller;
         private Vector3 velocity;
         private Vector3 planarVelocity;
+
+        public float CurrentSpeed => planarVelocity.magnitude;
+        public bool IsRunning { get; private set; }
 
         private void Awake() => controller = GetComponent<CharacterController>();
 
@@ -40,8 +45,12 @@ namespace GreenMachine.Park
                 else movement = toDestination.normalized;
             }
 
-            Vector3 desiredVelocity = movement * moveSpeed;
-            float response = movement.sqrMagnitude > 0.001f ? acceleration : deceleration;
+            IsRunning = movement.sqrMagnitude > 0.001f && ReadRunInput();
+            float targetSpeed = IsRunning ? runSpeed : moveSpeed;
+            Vector3 desiredVelocity = movement * targetSpeed;
+            float response = movement.sqrMagnitude > 0.001f
+                ? (IsRunning ? runAcceleration : acceleration)
+                : deceleration;
             planarVelocity = Vector3.MoveTowards(planarVelocity, desiredVelocity, response * Time.deltaTime);
 
             if (planarVelocity.sqrMagnitude > 0.001f)
@@ -53,6 +62,12 @@ namespace GreenMachine.Park
             velocity.y += Physics.gravity.y * Time.deltaTime;
             if (controller.isGrounded && velocity.y < 0f) velocity.y = -2f;
             controller.Move((planarVelocity + velocity) * Time.deltaTime);
+        }
+
+        private bool ReadRunInput()
+        {
+            return Keyboard.current != null &&
+                (Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed);
         }
 
         private bool TrySetClickDestination()
