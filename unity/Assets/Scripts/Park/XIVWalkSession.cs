@@ -55,7 +55,7 @@ namespace GreenMachine.Park
 
         private void Update()
         {
-            if (record == null) return;
+            if (record == null || IsComplete) return;
 
             record.durationSeconds += Time.deltaTime;
             if (player != null)
@@ -76,23 +76,47 @@ namespace GreenMachine.Park
             }
         }
 
-        public void SaveNow()
+        public bool SaveNow()
         {
-            if (record == null) return;
+            if (record == null) return false;
 
-            string directory = SaveDirectoryPath;
-            Directory.CreateDirectory(directory);
-            string path = Path.Combine(directory, "walk-session.json");
-            File.WriteAllText(path, JsonUtility.ToJson(record, true));
+            try
+            {
+                string directory = SaveDirectoryPath;
+                Directory.CreateDirectory(directory);
+                string path = Path.Combine(directory, "walk-session.json");
+                File.WriteAllText(path, JsonUtility.ToJson(record, true));
+                return true;
+            }
+            catch (IOException)
+            {
+                return false;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
         }
 
         public void CompleteWalk(string destinationName)
         {
             if (record == null || IsComplete) return;
 
+            string previousDestination = record.destinationName;
+            string previousCompletion = record.completedAtUtc;
             record.destinationName = destinationName;
             record.completedAtUtc = DateTime.UtcNow.ToString("O");
-            SaveNow();
+            if (!SaveNow())
+            {
+                record.destinationName = previousDestination;
+                record.completedAtUtc = previousCompletion;
+                return;
+            }
+
             AppendCompletedWalk();
             WalkCompleted?.Invoke(destinationName);
         }
@@ -145,6 +169,7 @@ namespace GreenMachine.Park
 
         private void OnInterestDiscovered(string pointName)
         {
+            if (record == null || IsComplete) return;
             record.pointsDiscovered++;
             record.lastPointName = pointName;
         }
