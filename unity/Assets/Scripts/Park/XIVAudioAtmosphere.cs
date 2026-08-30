@@ -30,8 +30,10 @@ namespace GreenMachine.Park
         [SerializeField] [Range(0f, 1f)] private float beatPulseStrength = 0.35f;
 
         private readonly float[] outputSamples = new float[128];
+        private readonly MaterialPropertyBlock materialProperties = new MaterialPropertyBlock();
         private float currentEnergy;
         private Light[] reactiveLights = System.Array.Empty<Light>();
+        private Renderer[] reactiveRenderers = System.Array.Empty<Renderer>();
 
         public float CurrentEnergy => currentEnergy;
         public float CurrentBeatPulse { get; private set; }
@@ -54,6 +56,17 @@ namespace GreenMachine.Park
             Light[] allLights = FindObjectsByType<Light>(FindObjectsSortMode.None);
             reactiveLights = System.Array.FindAll(allLights, light =>
                 light != null && (light.name.Contains("Glow") || light.name.Contains("Beacon")));
+            Renderer[] allRenderers = FindObjectsByType<Renderer>(FindObjectsSortMode.None);
+            reactiveRenderers = System.Array.FindAll(allRenderers, renderer =>
+                renderer != null && (renderer.name.Contains("Glow") || renderer.name.Contains("Beacon") || renderer.name.Contains("Lantern")));
+            foreach (Renderer renderer in reactiveRenderers)
+            {
+                if (renderer == null || renderer.sharedMaterial == null) continue;
+                if (renderer.material.HasProperty("_EmissionColor"))
+                {
+                    renderer.material.EnableKeyword("_EMISSION");
+                }
+            }
 
             string analysisPath = Environment.GetEnvironmentVariable("XIV_AUDIO_ANALYSIS_PATH");
             if (!string.IsNullOrWhiteSpace(analysisPath)) LoadAnalysisFile(analysisPath);
@@ -199,6 +212,15 @@ namespace GreenMachine.Park
                 if (light == null) continue;
                 light.color = color;
                 light.intensity = intensity;
+            }
+
+            Color emission = color * Mathf.Lerp(0.2f, 1.6f, visualEnergy);
+            foreach (Renderer renderer in reactiveRenderers)
+            {
+                if (renderer == null || renderer.sharedMaterial == null || !renderer.sharedMaterial.HasProperty("_EmissionColor")) continue;
+                materialProperties.Clear();
+                materialProperties.SetColor("_EmissionColor", emission);
+                renderer.SetPropertyBlock(materialProperties);
             }
         }
 
