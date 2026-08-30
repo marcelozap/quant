@@ -17,6 +17,8 @@ unity/obj/
 unity/UserSettings/
 unity/Builds/
 unity/Builds.meta
+unity/LocalState/
+unity/Audio/
 *.blend1
 *.blend1.meta
 unity/Assets/Scenes/

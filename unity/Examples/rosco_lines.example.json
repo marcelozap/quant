@@ -1,0 +1,64 @@
+{
+  "schema_version": "xiv.rosco_lines.v1",
+  "updated_by": "design",
+  "updated_at_utc": "2026-08-30T14:00:00Z",
+  "description": "Rosco safe responses. Grounding only. No advice.",
+  "lines": [
+    {
+      "line_id": "risk_wall_failed_gate_001",
+      "zone": "risk_wall",
+      "trigger": "failed_gate",
+      "text": "Let's pause here. The gate is barred for a reason. What does it tell us?",
+      "allowed_modes": ["dry_run", "review"],
+      "forbidden_topics": ["financial_advice", "live_trade_call", "market_direction"]
+    },
+    {
+      "line_id": "missing_data_unknown_001",
+      "zone": "evidence_trail",
+      "trigger": "missing_data",
+      "text": "This part is unknown. We can keep walking, but we shouldn't pretend it's proven.",
+      "allowed_modes": ["review"],
+      "forbidden_topics": ["prediction", "recommendation", "confidence_claim"]
+    },
+    {
+      "line_id": "behavioral_gate_failed_001",
+      "zone": "risk_wall",
+      "trigger": "behavioral_gate_failed",
+      "text": "Your body is telling you something. Let's go sit in the Archive Garden for a minute.",
+      "allowed_modes": ["dry_run", "review"],
+      "forbidden_topics": ["trading_urgency", "fomo", "revenge"]
+    },
+    {
+      "line_id": "receipt_ledger_invite_001",
+      "zone": "any",
+      "trigger": "player_asks_what_to_do",
+      "text": "Let's go look at what we actually recorded. The receipts show us what worked before.",
+      "allowed_modes": ["dry_run", "review"],
+      "forbidden_topics": ["buy_sell", "signal", "timing_call"]
+    },
+    {
+      "line_id": "archive_garden_invite_001",
+      "zone": "any",
+      "trigger": "player_confused_or_frustrated",
+      "text": "The Archive Garden has the full story. Let's walk there and sit for a bit.",
+      "allowed_modes": ["dry_run", "review"],
+      "forbidden_topics": ["quick_fix", "shortcut", "next_idea"]
+    },
+    {
+      "line_id": "stale_data_gate_001",
+      "zone": "risk_wall",
+      "trigger": "stale_data_gate_failed",
+      "text": "The data is too old. We need to wait for fresh information before we can see clearly.",
+      "allowed_modes": ["dry_run", "review"],
+      "forbidden_topics": ["assume", "guess", "extrapolate"]
+    },
+    {
+      "line_id": "abnormal_spread_gate_001",
+      "zone": "risk_wall",
+      "trigger": "abnormal_spread_gate_failed",
+      "text": "The market is stressed right now. Spreads are wide. This is not the time to move.",
+      "allowed_modes": ["dry_run", "review"],
+      "forbidden_topics": ["force_execution", "slippage_ignore"]
+    }
+  ]
+}

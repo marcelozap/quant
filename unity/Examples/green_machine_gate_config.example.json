@@ -1,0 +1,42 @@
+{
+  "schema_version": "xiv.green_machine.gates.v1",
+  "updated_by": "local_user",
+  "updated_at_utc": "2026-08-30T14:00:00Z",
+  "description": "Green Machine risk gates. All must pass (fail-closed).",
+  "gates": {
+    "stale_data": {
+      "enabled": true,
+      "description": "Market data must be fresh (within max_age_seconds)",
+      "max_age_seconds": 300,
+      "severity": "hard_block"
+    },
+    "abnormal_spread": {
+      "enabled": true,
+      "description": "Bid-ask spread must be within normal range",
+      "max_spread_bps": 50,
+      "severity": "hard_block",
+      "note": "Spread in basis points (1 bps = 0.01%)"
+    },
+    "concentration_limit": {
+      "enabled": true,
+      "description": "No single position exceeds portfolio limit",
+      "max_single_name_percent": 10,
+      "severity": "hard_block",
+      "note": "Prevents overconcentration"
+    },
+    "drawdown_guard": {
+      "enabled": true,
+      "description": "Equity drawdown must be within acceptable range",
+      "max_drawdown_percent": -5,
+      "severity": "hard_block",
+      "note": "Negative percentage (e.g., -5 means 5% max drawdown)"
+    },
+    "behavioral_gate": {
+      "enabled": true,
+      "description": "Manual behavioral check (sleep, mood, body state)",
+      "requires_manual_clear": true,
+      "severity": "hard_block",
+      "note": "Player must explicitly confirm readiness"
+    }
+  }
+}
