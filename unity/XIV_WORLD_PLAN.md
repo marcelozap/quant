@@ -97,6 +97,8 @@ The generated Semiconductor Speedway also contains an XIV Systems board. It prov
 
 The editor also exposes **XIV -> Validate First Playable World**. It checks the generated scene, required player/Rosco/route/data objects, and the absence of serialized API-token fields before the first runtime test.
 
+Archive Garden also reads an optional local XIV/archive.json file for songs, projects, and memories. It is a personal context surface, not a second task manager: entries remain local, the empty state is explicit, and the walk remains playable when no archive exists.
+
 The first runtime test is captured in `XIV_HOME_PC_VALIDATION.md`: a home-PC pass must verify the full Green Gate-to-Archive Garden walk, Rosco behavior, local music response, pause and save recovery, and the absence of private data before the vertical slice is treated as playable.
 
 ### Month 5: the complete walk

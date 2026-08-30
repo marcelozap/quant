@@ -393,6 +393,23 @@ namespace GreenMachine.Editor
             summarySerialized.FindProperty("display").objectReferenceValue = summaryText;
             summarySerialized.FindProperty("session").objectReferenceValue = GameObject.Find("XIV Walk Session").GetComponent<XIVWalkSession>();
             summarySerialized.ApplyModifiedPropertiesWithoutUndo();
+
+            GameObject archiveEntries = new GameObject("XIV Archive Entries");
+            archiveEntries.transform.SetParent(parent);
+            archiveEntries.transform.localPosition = new Vector3(0f, 4.1f, 4.35f);
+            TextMesh archiveText = archiveEntries.AddComponent<TextMesh>();
+            archiveText.text = "ARCHIVE GARDEN\n\nNO ENTRIES YET\n\nLOCAL / EDITABLE";
+            archiveText.anchor = TextAnchor.MiddleCenter;
+            archiveText.alignment = TextAlignment.Center;
+            archiveText.characterSize = 0.2f;
+            archiveText.fontSize = 34;
+            archiveText.color = Color.white;
+            archiveEntries.AddComponent<XIVBillboard>();
+
+            XIVArchiveGarden archive = archiveEntries.AddComponent<XIVArchiveGarden>();
+            SerializedObject archiveSerialized = new SerializedObject(archive);
+            archiveSerialized.FindProperty("display").objectReferenceValue = archiveText;
+            archiveSerialized.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private static GameObject CreatePart(
