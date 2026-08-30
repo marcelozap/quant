@@ -91,6 +91,8 @@ The current builder already creates the first Green Gate landmark, route blockou
 
 It also creates `XIVWalkSession`, which records only local walk duration, distance, Rosco discoveries, and peak atmosphere energy. This is the first save boundary for the world; it does not import or serialize Green Machine trade data.
 
+The generated Earnings Arcade also contains a read-only Green Machine board. It can show today's local review and song memory through `/world/today`, but it degrades to an explicit offline state and never places orders.
+
 ### Month 5: the complete walk
 
 - Build the Green Gate to Archive Garden route as one authored experience.

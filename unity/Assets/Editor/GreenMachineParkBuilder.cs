@@ -36,6 +36,7 @@ namespace GreenMachine.Editor
             CreateWorldController();
             CreateAudioAtmosphere();
             CreateWalkSession();
+            CreateGreenMachineBoard();
             CreateFastTravel();
             if (!AssetDatabase.IsValidFolder("Assets/Scenes")) AssetDatabase.CreateFolder("Assets", "Scenes");
             EditorSceneManager.SaveScene(scene, "Assets/Scenes/XIVWorld.unity");
@@ -295,6 +296,37 @@ namespace GreenMachine.Editor
             serialized.FindProperty("player").objectReferenceValue = GameObject.Find("Marcelo").transform;
             serialized.FindProperty("rosco").objectReferenceValue = GameObject.Find("Rosco").GetComponent<RoscoCompanion>();
             serialized.FindProperty("atmosphere").objectReferenceValue = Object.FindFirstObjectByType<XIVAudioAtmosphere>();
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void CreateGreenMachineBoard()
+        {
+            GameObject district = GameObject.Find("Earnings Arcade");
+            if (district == null) return;
+
+            GameObject board = new GameObject("Green Machine Read Only Board");
+            board.transform.SetParent(district.transform);
+            board.transform.localPosition = new Vector3(0f, 2.7f, -4.2f);
+
+            CreatePart(PrimitiveType.Cube, "Board Frame", board.transform, Vector3.zero, new Vector3(5.2f, 3.2f, 0.3f), new Color(0.025f, 0.045f, 0.06f));
+            CreatePart(PrimitiveType.Cube, "Board Screen", board.transform, new Vector3(0f, 0f, -0.18f), new Vector3(4.7f, 2.7f, 0.08f), new Color(0.06f, 0.18f, 0.2f));
+
+            GameObject textObject = new GameObject("Board Text");
+            textObject.transform.SetParent(board.transform);
+            textObject.transform.localPosition = new Vector3(-2.05f, 1.05f, -0.25f);
+            TextMesh text = textObject.AddComponent<TextMesh>();
+            text.text = "GREEN MACHINE\nLOCAL DATA\n\nOFFLINE BY DESIGN";
+            text.anchor = TextAnchor.UpperLeft;
+            text.alignment = TextAlignment.Left;
+            text.characterSize = 0.19f;
+            text.fontSize = 42;
+            text.color = Color.white;
+
+            LocalApiClient client = board.AddComponent<LocalApiClient>();
+            GreenMachineBoard dataBoard = board.AddComponent<GreenMachineBoard>();
+            SerializedObject serialized = new SerializedObject(dataBoard);
+            serialized.FindProperty("apiClient").objectReferenceValue = client;
+            serialized.FindProperty("display").objectReferenceValue = text;
             serialized.ApplyModifiedPropertiesWithoutUndo();
         }
 
