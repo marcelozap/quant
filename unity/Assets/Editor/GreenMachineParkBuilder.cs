@@ -391,7 +391,6 @@ namespace GreenMachine.Editor
             XIVSessionSummary sessionSummary = summary.AddComponent<XIVSessionSummary>();
             SerializedObject summarySerialized = new SerializedObject(sessionSummary);
             summarySerialized.FindProperty("display").objectReferenceValue = summaryText;
-            summarySerialized.FindProperty("session").objectReferenceValue = GameObject.Find("XIV Walk Session").GetComponent<XIVWalkSession>();
             summarySerialized.ApplyModifiedPropertiesWithoutUndo();
 
             GameObject archiveEntries = new GameObject("XIV Archive Entries");

@@ -30,7 +30,7 @@ namespace GreenMachine.Park
         [SerializeField] [Range(0f, 1f)] private float beatPulseStrength = 0.35f;
 
         private readonly float[] outputSamples = new float[128];
-        private readonly MaterialPropertyBlock materialProperties = new MaterialPropertyBlock();
+        private MaterialPropertyBlock materialProperties;
         private float currentEnergy;
         private Light[] reactiveLights = System.Array.Empty<Light>();
         private Renderer[] reactiveRenderers = System.Array.Empty<Renderer>();
@@ -40,6 +40,11 @@ namespace GreenMachine.Park
         public float CurrentEnergy => currentEnergy;
         public float CurrentBeatPulse { get; private set; }
         public bool HasBeatGrid => beatBpm > 0f;
+
+        private void Awake()
+        {
+            materialProperties = new MaterialPropertyBlock();
+        }
 
         private void Update()
         {
@@ -280,8 +285,8 @@ namespace GreenMachine.Park
 
             if (beatTimes.Length > 0)
             {
-                float distanceFromBeat = Mathf.Abs(musicSource.time - beatTimes[ClosestBeatIndex(musicSource.time)]);
-                return Mathf.Clamp01(1f - distanceFromBeat / beatPulseWidth);
+                float explicitDistanceFromBeat = Mathf.Abs(musicSource.time - beatTimes[ClosestBeatIndex(musicSource.time)]);
+                return Mathf.Clamp01(1f - explicitDistanceFromBeat / beatPulseWidth);
             }
 
             if (beatBpm <= 0f) return 0f;
