@@ -13,6 +13,7 @@ namespace GreenMachine.Park
         }
 
         [SerializeField] private Transform player;
+        [SerializeField] private RoscoCompanion rosco;
         [SerializeField] private List<Destination> destinations = new List<Destination>();
 
         public void TravelTo(string districtName)
@@ -22,6 +23,7 @@ namespace GreenMachine.Park
                 if (destination.districtName == districtName && destination.arrivalPoint != null)
                 {
                     player.position = destination.arrivalPoint.position;
+                    if (rosco != null) rosco.RejoinPlayer();
                     return;
                 }
             }

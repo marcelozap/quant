@@ -17,6 +17,8 @@ namespace GreenMachine.Park
         [SerializeField] private Transform player;
         [SerializeField] private float followDistance = 2.3f;
         [SerializeField] private float followSpeed = 4.2f;
+        [SerializeField] private float catchUpDistance = 7f;
+        [SerializeField] private float relocateDistance = 24f;
         [SerializeField] private float turnSpeed = 8f;
         [SerializeField] private float stopDistance = 0.35f;
         [SerializeField] private float greetingDuration = 1.4f;
@@ -79,7 +81,7 @@ namespace GreenMachine.Park
                     if (stateTimer <= 0f) state = CompanionState.Follow;
                     break;
                 case CompanionState.Follow:
-                    MoveToward(FollowTarget(), followSpeed);
+                    MoveWithDistanceBand();
                     CheckForNearbyInterest();
                     break;
                 case CompanionState.Wait:
@@ -118,6 +120,17 @@ namespace GreenMachine.Park
         public void Recall()
         {
             state = CompanionState.Return;
+            stateTimer = 0f;
+        }
+
+        public void RejoinPlayer()
+        {
+            if (player == null) return;
+            transform.position = FollowTarget();
+            transform.forward = player.forward;
+            groundY = transform.position.y;
+            previousPosition = transform.position;
+            state = CompanionState.Follow;
             stateTimer = 0f;
         }
 
@@ -168,13 +181,28 @@ namespace GreenMachine.Park
             return target;
         }
 
+        private void MoveWithDistanceBand()
+        {
+            Vector3 target = FollowTarget();
+            float distance = FlatDistance(transform.position, target);
+            if (distance >= relocateDistance)
+            {
+                RejoinPlayer();
+                return;
+            }
+
+            float catchUp = Mathf.InverseLerp(catchUpDistance, relocateDistance, distance);
+            float speed = followSpeed * Mathf.Lerp(1f, 2.2f, catchUp);
+            MoveToward(target, speed);
+        }
+
         private void MoveToward(Vector3 target, float speed)
         {
             Vector3 delta = target - transform.position;
             delta.y = 0f;
             if (delta.sqrMagnitude <= stopDistance * stopDistance)
             {
-                Face(player.position);
+                Face(state == CompanionState.Investigate ? investigationTarget : player.position);
                 return;
             }
 

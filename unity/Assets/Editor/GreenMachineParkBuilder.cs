@@ -453,6 +453,7 @@ namespace GreenMachine.Editor
             ParkFastTravel fastTravel = travel.AddComponent<ParkFastTravel>();
             SerializedObject serialized = new SerializedObject(fastTravel);
             serialized.FindProperty("player").objectReferenceValue = GameObject.Find("Marcelo").transform;
+            serialized.FindProperty("rosco").objectReferenceValue = GameObject.Find("Rosco").GetComponent<RoscoCompanion>();
             SerializedProperty destinations = serialized.FindProperty("destinations");
             destinations.arraySize = Districts.Length;
             for (int i = 0; i < Districts.Length; i++)
