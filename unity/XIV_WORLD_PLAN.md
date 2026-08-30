@@ -87,7 +87,7 @@ These are destinations, not dashboard panels pasted into a game. The world shoul
 
 **Gate:** a screenshot of Green Gate is recognizable as XIV without relying on a debug label.
 
-The current builder already creates the first Green Gate and Archive Garden landmarks, a dressed route blockout, Rosco interest points, and a local `XIVAudioAtmosphere` component. These are foundations for the gates below, not evidence that the final art or audio experience is complete.
+The current builder already creates the first Green Gate and Archive Garden landmarks, a dressed route blockout, Rosco interest points, and a local `XIVAudioAtmosphere` component. `RoscoCompanion` also exposes an optional animator handoff for speed, state, investigation, and celebration, so a final skinned Rosco can replace the placeholder without rewriting the route logic. These are foundations for the gates below, not evidence that the final art or audio experience is complete.
 
 It also creates `XIVWalkSession`, which records only local walk duration, distance, Rosco discoveries, and peak atmosphere energy. This is the first save boundary for the world; it does not import or serialize Green Machine trade data.
 

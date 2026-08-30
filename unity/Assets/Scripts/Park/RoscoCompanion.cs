@@ -26,29 +26,41 @@ namespace GreenMachine.Park
         [SerializeField] private bool inspectNearbyPoints = true;
         [SerializeField] private float interestSearchRadius = 10f;
         [SerializeField] private float interestCooldown = 7f;
+        [SerializeField] private Animator animator;
 
         private CompanionState state = CompanionState.Greeting;
         private Vector3 investigationTarget;
         private Vector3 baseScale;
+        private Vector3 previousPosition;
         private float stateTimer;
         private float celebrationTimer;
         private float groundY;
         private float nextInterestCheck;
+        private float currentSpeed;
         private RoscoInterestPoint[] interestPoints = System.Array.Empty<RoscoInterestPoint>();
         private readonly HashSet<RoscoInterestPoint> visitedPoints = new HashSet<RoscoInterestPoint>();
 
+        private bool hasSpeedParameter;
+        private bool hasStateParameter;
+        private bool hasInvestigatingParameter;
+        private bool hasCelebrateParameter;
+
         public event System.Action<string> InterestDiscovered;
         public string CurrentState => state.ToString();
+        public float CurrentSpeed => currentSpeed;
 
         private void Awake()
         {
             baseScale = transform.localScale;
             stateTimer = greetingDuration;
             groundY = transform.position.y;
+            previousPosition = transform.position;
         }
 
         private void Start()
         {
+            if (animator == null) animator = GetComponentInChildren<Animator>();
+            CacheAnimatorParameters();
             interestPoints = FindObjectsByType<RoscoInterestPoint>(FindObjectsSortMode.None);
         }
 
@@ -91,7 +103,10 @@ namespace GreenMachine.Park
                     break;
             }
 
+            currentSpeed = FlatDistance(transform.position, previousPosition) / Mathf.Max(Time.deltaTime, 0.001f);
+            previousPosition = transform.position;
             ApplyIdleMotion();
+            UpdateAnimator();
         }
 
         public void WaitWithPlayer(float seconds = 0f)
@@ -183,6 +198,33 @@ namespace GreenMachine.Park
             Vector3 position = transform.position;
             position.y = groundY + bob;
             transform.position = position;
+        }
+
+        private void CacheAnimatorParameters()
+        {
+            if (animator == null) return;
+            hasSpeedParameter = HasAnimatorParameter("Speed", AnimatorControllerParameterType.Float);
+            hasStateParameter = HasAnimatorParameter("State", AnimatorControllerParameterType.Int);
+            hasInvestigatingParameter = HasAnimatorParameter("IsInvestigating", AnimatorControllerParameterType.Bool);
+            hasCelebrateParameter = HasAnimatorParameter("Celebrate", AnimatorControllerParameterType.Bool);
+        }
+
+        private void UpdateAnimator()
+        {
+            if (animator == null) return;
+            if (hasSpeedParameter) animator.SetFloat("Speed", currentSpeed);
+            if (hasStateParameter) animator.SetInteger("State", (int)state);
+            if (hasInvestigatingParameter) animator.SetBool("IsInvestigating", state == CompanionState.Investigate);
+            if (hasCelebrateParameter) animator.SetBool("Celebrate", celebrationTimer > 0f);
+        }
+
+        private bool HasAnimatorParameter(string parameterName, AnimatorControllerParameterType parameterType)
+        {
+            foreach (AnimatorControllerParameter parameter in animator.parameters)
+            {
+                if (parameter.name == parameterName && parameter.type == parameterType) return true;
+            }
+            return false;
         }
 
         private static float FlatDistance(Vector3 first, Vector3 second)
