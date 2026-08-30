@@ -55,6 +55,9 @@ namespace GreenMachine.Editor
             NavMeshSurface navigationSurface = GameObject.Find("Park Grounds")?.GetComponent<NavMeshSurface>();
             Check(navigationSurface != null, "Park grounds have a NavMesh surface", ref passed, ref failed);
             Check(navigationSurface != null && navigationSurface.navMeshData != null, "Park grounds have a baked NavMesh", ref passed, ref failed);
+            Check(RenderSettings.skybox != null, "XIV has an authored sky", ref passed, ref failed);
+            Check(RenderSettings.skybox != null && AssetDatabase.GetAssetPath(RenderSettings.skybox).EndsWith("XIVProceduralSky.mat"), "XIV sky is a persisted asset", ref passed, ref failed);
+            Check(RenderSettings.fog, "XIV has readable depth fog", ref passed, ref failed);
             Check(GameObject.Find("Marcelo")?.GetComponent<CharacterController>() != null, "Marcelo has a CharacterController", ref passed, ref failed);
             Check(GameObject.Find("Marcelo")?.GetComponent<ThirdPersonMover>() != null, "Marcelo has ThirdPersonMover", ref passed, ref failed);
             Check(GameObject.Find("Main Camera")?.GetComponent<ThirdPersonCamera>() != null, "Main Camera has ThirdPersonCamera", ref passed, ref failed);

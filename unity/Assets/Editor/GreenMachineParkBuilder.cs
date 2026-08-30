@@ -5,12 +5,14 @@ using UnityEditor.SceneManagement;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 namespace GreenMachine.Editor
 {
     public static class GreenMachineParkBuilder
     {
+        private const string SkyMaterialPath = "Assets/Art/Generated/XIVProceduralSky.mat";
         private static readonly (string name, Vector3 position, Color color)[] Districts =
         {
             ("Green Gate", new Vector3(0f, 0f, 0f), new Color(0.88f, 0.96f, 0.34f)),
@@ -510,9 +512,49 @@ namespace GreenMachine.Editor
         {
             GameObject world = new GameObject("Park World Controller");
             ParkWorldController controller = world.AddComponent<ParkWorldController>();
+            Material skyMaterial = CreateSkyMaterial();
+            RenderSettings.skybox = skyMaterial;
+            RenderSettings.ambientMode = AmbientMode.Skybox;
+            RenderSettings.ambientIntensity = 0.8f;
+            RenderSettings.reflectionIntensity = 0.55f;
+            RenderSettings.fog = true;
+            RenderSettings.fogMode = FogMode.ExponentialSquared;
+            RenderSettings.fogColor = new Color(0.08f, 0.14f, 0.18f);
+            RenderSettings.fogDensity = 0.008f;
             SerializedObject serialized = new SerializedObject(controller);
             serialized.FindProperty("sun").objectReferenceValue = Object.FindFirstObjectByType<Light>();
+            serialized.FindProperty("skyMaterial").objectReferenceValue = skyMaterial;
             serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static Material CreateSkyMaterial()
+        {
+            if (!AssetDatabase.IsValidFolder("Assets/Art/Generated"))
+            {
+                if (!AssetDatabase.IsValidFolder("Assets/Art")) AssetDatabase.CreateFolder("Assets", "Art");
+                AssetDatabase.CreateFolder("Assets/Art", "Generated");
+            }
+
+            Material skyMaterial = AssetDatabase.LoadAssetAtPath<Material>(SkyMaterialPath);
+            if (skyMaterial == null)
+            {
+                Shader skyShader = Shader.Find("Skybox/Procedural");
+                if (skyShader == null)
+                {
+                    Debug.LogError("XIV could not find the Skybox/Procedural shader.");
+                    return null;
+                }
+
+                skyMaterial = new Material(skyShader) { name = "XIV Procedural Sky" };
+                AssetDatabase.CreateAsset(skyMaterial, SkyMaterialPath);
+            }
+
+            if (skyMaterial.HasProperty("_SkyTint")) skyMaterial.SetColor("_SkyTint", new Color(0.18f, 0.36f, 0.48f));
+            if (skyMaterial.HasProperty("_GroundColor")) skyMaterial.SetColor("_GroundColor", new Color(0.08f, 0.14f, 0.15f));
+            if (skyMaterial.HasProperty("_Exposure")) skyMaterial.SetFloat("_Exposure", 0.85f);
+            EditorUtility.SetDirty(skyMaterial);
+            AssetDatabase.SaveAssets();
+            return skyMaterial;
         }
 
         private static void CreateAudioAtmosphere()
