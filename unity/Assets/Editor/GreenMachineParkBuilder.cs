@@ -42,6 +42,7 @@ namespace GreenMachine.Editor
             CreateWorldController();
             CreateAudioAtmosphere();
             CreateWalkSession();
+            CreateWalkGuide();
             CreateGreenMachineBoard();
             CreateXivSystemsBoard();
             CreateFastTravel();
@@ -421,6 +422,31 @@ namespace GreenMachine.Editor
             serialized.FindProperty("player").objectReferenceValue = GameObject.Find("Marcelo").transform;
             serialized.FindProperty("rosco").objectReferenceValue = GameObject.Find("Rosco").GetComponent<RoscoCompanion>();
             serialized.FindProperty("atmosphere").objectReferenceValue = Object.FindFirstObjectByType<XIVAudioAtmosphere>();
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void CreateWalkGuide()
+        {
+            GameObject gate = GameObject.Find("Green Gate");
+            if (gate == null) return;
+
+            GameObject guide = new GameObject("XIV Walk Guide");
+            guide.transform.SetParent(gate.transform);
+            guide.transform.localPosition = new Vector3(0f, 3.2f, -3.7f);
+            TextMesh text = guide.AddComponent<TextMesh>();
+            text.text = "ARCHIVE GARDEN ->\nWALK WITH ROSCO";
+            text.anchor = TextAnchor.MiddleCenter;
+            text.alignment = TextAlignment.Center;
+            text.characterSize = 0.28f;
+            text.fontSize = 42;
+            text.color = Color.white;
+            guide.AddComponent<XIVBillboard>();
+
+            XIVWalkGuide walkGuide = guide.AddComponent<XIVWalkGuide>();
+            SerializedObject serialized = new SerializedObject(walkGuide);
+            serialized.FindProperty("display").objectReferenceValue = text;
+            serialized.FindProperty("session").objectReferenceValue = GameObject.Find("XIV Walk Session").GetComponent<XIVWalkSession>();
+            serialized.FindProperty("rosco").objectReferenceValue = GameObject.Find("Rosco").GetComponent<RoscoCompanion>();
             serialized.ApplyModifiedPropertiesWithoutUndo();
         }
 

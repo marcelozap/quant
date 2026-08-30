@@ -28,6 +28,7 @@ namespace GreenMachine.Park
         private Vector3 previousPlayerPosition;
         private float autosaveTimer;
 
+        public event Action<string> WalkCompleted;
         public WalkSessionRecord CurrentRecord => record;
         public bool IsComplete => record != null && !string.IsNullOrWhiteSpace(record.completedAtUtc);
 
@@ -78,6 +79,7 @@ namespace GreenMachine.Park
             record.destinationName = destinationName;
             record.completedAtUtc = DateTime.UtcNow.ToString("O");
             SaveNow();
+            WalkCompleted?.Invoke(destinationName);
         }
 
         private void OnInterestDiscovered(string pointName)

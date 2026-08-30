@@ -80,6 +80,7 @@ namespace GreenMachine.Editor
             Check(GameObject.Find("XIV Audio Atmosphere")?.GetComponent<XIVAudioAtmosphere>() != null, "Audio atmosphere exists", ref passed, ref failed);
             Check(GameObject.Find("XIV Audio Atmosphere")?.GetComponent<AudioSource>() != null, "Audio source exists", ref passed, ref failed);
             Check(GameObject.Find("XIV Walk Session")?.GetComponent<XIVWalkSession>() != null, "Walk session exists", ref passed, ref failed);
+            Check(GameObject.Find("XIV Walk Guide")?.GetComponent<XIVWalkGuide>() != null, "First walk guide exists", ref passed, ref failed);
             Check(GameObject.Find("Park World Controller")?.GetComponent<ParkWorldController>() != null, "World controller exists", ref passed, ref failed);
             Check(GameObject.Find("Park Fast Travel")?.GetComponent<ParkFastTravel>() != null, "Fast travel registry exists", ref passed, ref failed);
             Check(GameObject.Find("Green Machine Read Only Board")?.GetComponent<GreenMachineBoard>() != null, "Green Machine board is read-only", ref passed, ref failed);
