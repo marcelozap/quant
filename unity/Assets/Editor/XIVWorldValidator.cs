@@ -66,6 +66,8 @@ namespace GreenMachine.Editor
             {
                 Check(GameObject.Find(landmark) != null, $"Landmark exists: {landmark}", ref passed, ref failed);
             }
+            Check(GameObject.Find("Speedway Deck") != null, "Semiconductor Speedway has an authored deck", ref passed, ref failed);
+            Check(GameObject.Find("Review Booth 1") != null, "Earnings Arcade has authored review booths", ref passed, ref failed);
             GameObject greenGate = GameObject.Find("Green Gate");
             Check(greenGate != null, "Green Gate exists", ref passed, ref failed);
             Check(GameObject.Find("XIV Gate Sign")?.GetComponent<XIVBillboard>() != null, "Green Gate sign faces the camera", ref passed, ref failed);

@@ -151,6 +151,16 @@ namespace GreenMachine.Editor
                 CreateArchiveGarden(root.transform, color);
                 return;
             }
+            if (districtName == "Semiconductor Speedway")
+            {
+                CreateSemiconductorSpeedway(root.transform, color);
+                return;
+            }
+            if (districtName == "Earnings Arcade")
+            {
+                CreateEarningsArcade(root.transform, color);
+                return;
+            }
 
             GameObject building = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             building.name = $"{districtName} Landmark";
@@ -166,9 +176,63 @@ namespace GreenMachine.Editor
             beacon.transform.localPosition = new Vector3(0f, 6.5f, 0f);
             beacon.GetComponent<Renderer>().sharedMaterial = MaterialFor(Color.Lerp(color, Color.white, 0.5f));
 
+            CreateDistrictLabel(root.transform, districtName, 8f);
+        }
+
+        private static void CreateSemiconductorSpeedway(Transform parent, Color accentColor)
+        {
+            Color deck = new Color(0.035f, 0.09f, 0.15f);
+            Color structure = new Color(0.06f, 0.16f, 0.22f);
+            Color trim = Color.Lerp(accentColor, Color.white, 0.35f);
+
+            CreatePart(PrimitiveType.Cylinder, "Speedway Deck", parent, new Vector3(0f, 0.22f, 0f), new Vector3(8f, 0.22f, 8f), deck);
+            CreatePart(PrimitiveType.Cube, "Speedway Spine", parent, new Vector3(0f, 1.1f, 0f), new Vector3(1.15f, 1.1f, 9f), structure);
+            CreatePart(PrimitiveType.Cube, "Speedway Rail Left", parent, new Vector3(-4.2f, 1.05f, 0f), new Vector3(0.28f, 1.05f, 7.2f), accentColor);
+            CreatePart(PrimitiveType.Cube, "Speedway Rail Right", parent, new Vector3(4.2f, 1.05f, 0f), new Vector3(0.28f, 1.05f, 7.2f), accentColor);
+
+            for (int i = -1; i <= 1; i++)
+            {
+                float x = i * 2.25f;
+                CreatePart(PrimitiveType.Cube, $"Systems Module {i + 2}", parent, new Vector3(x, 1.05f, 2.65f), new Vector3(1.45f, 1.05f, 0.85f), structure);
+                GameObject moduleLight = CreatePart(PrimitiveType.Sphere, $"Systems Module Light {i + 2}", parent, new Vector3(x, 2.2f, 2.65f), new Vector3(0.22f, 0.22f, 0.22f), trim);
+                AddWindMotion(moduleLight, i * 0.8f);
+            }
+
+            CreatePart(PrimitiveType.Cylinder, "Systems Tower", parent, new Vector3(0f, 3.2f, 2.7f), new Vector3(1.5f, 3.2f, 1.5f), structure);
+            GameObject towerBeacon = CreatePart(PrimitiveType.Sphere, "Systems Tower Beacon", parent, new Vector3(0f, 7.1f, 2.7f), new Vector3(0.75f, 0.75f, 0.75f), trim);
+            AddWindMotion(towerBeacon, 1.7f);
+            CreatePointLight(parent, "Systems Tower Glow", new Vector3(0f, 5.5f, 2.7f), accentColor);
+            CreateDistrictLabel(parent, "Semiconductor Speedway", 8.2f);
+        }
+
+        private static void CreateEarningsArcade(Transform parent, Color accentColor)
+        {
+            Color floor = new Color(0.16f, 0.045f, 0.08f);
+            Color structure = new Color(0.12f, 0.06f, 0.11f);
+            Color screen = Color.Lerp(accentColor, Color.white, 0.28f);
+
+            CreatePart(PrimitiveType.Cylinder, "Review Arcade Floor", parent, new Vector3(0f, 0.22f, 0f), new Vector3(8f, 0.22f, 8f), floor);
+            CreatePart(PrimitiveType.Cube, "Review Arcade Back Wall", parent, new Vector3(0f, 3.1f, 3.8f), new Vector3(7.2f, 3.1f, 0.4f), structure);
+            CreatePart(PrimitiveType.Cube, "Review Arcade Header", parent, new Vector3(0f, 6.3f, 3.55f), new Vector3(8.2f, 0.32f, 0.75f), accentColor);
+
+            for (int i = -1; i <= 1; i++)
+            {
+                float x = i * 2.25f;
+                CreatePart(PrimitiveType.Cube, $"Review Booth {i + 2}", parent, new Vector3(x, 1.45f, 1.8f), new Vector3(1.65f, 1.45f, 1.2f), structure);
+                CreatePart(PrimitiveType.Cube, $"Review Screen {i + 2}", parent, new Vector3(x, 2.85f, 1.15f), new Vector3(1.25f, 0.78f, 0.1f), screen);
+                GameObject boothLight = CreatePart(PrimitiveType.Sphere, $"Review Booth Light {i + 2}", parent, new Vector3(x, 3.85f, 1.75f), new Vector3(0.2f, 0.2f, 0.2f), screen);
+                AddWindMotion(boothLight, i * 0.9f + 0.4f);
+            }
+
+            CreatePointLight(parent, "Review Arcade Glow", new Vector3(0f, 3.5f, 1.2f), accentColor);
+            CreateDistrictLabel(parent, "Earnings Arcade", 8.2f);
+        }
+
+        private static void CreateDistrictLabel(Transform parent, string districtName, float height)
+        {
             GameObject label = new GameObject("District Label");
-            label.transform.SetParent(root.transform);
-            label.transform.localPosition = new Vector3(0f, 8f, 0f);
+            label.transform.SetParent(parent);
+            label.transform.localPosition = new Vector3(0f, height, 0f);
             TextMesh text = label.AddComponent<TextMesh>();
             text.text = districtName;
             text.anchor = TextAnchor.MiddleCenter;
