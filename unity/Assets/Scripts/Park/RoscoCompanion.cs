@@ -156,6 +156,7 @@ namespace GreenMachine.Park
 
             if (closest == null) return;
             if (!closest.Repeatable) visitedPoints.Add(closest);
+            closest.MarkDiscovered();
             InterestDiscovered?.Invoke(closest.PointName);
             Investigate(closest.transform.position, closest.PauseSeconds);
         }

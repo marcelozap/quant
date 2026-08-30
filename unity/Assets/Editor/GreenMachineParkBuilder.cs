@@ -125,6 +125,7 @@ namespace GreenMachine.Editor
             SerializedObject serialized = new SerializedObject(interest);
             serialized.FindProperty("pointName").stringValue = name;
             serialized.ApplyModifiedPropertiesWithoutUndo();
+            CreatePointLight(point.transform, "Interest Glow", Vector3.up * 1.1f, color);
         }
 
         private static void CreateDistrict(string districtName, Vector3 position, Color color)
