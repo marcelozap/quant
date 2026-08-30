@@ -213,15 +213,54 @@ namespace GreenMachine.Editor
 
         private static void CreateRosco()
         {
-            GameObject rosco = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            rosco.name = "Rosco";
-            rosco.transform.position = new Vector3(-2f, 0.6f, -8f);
-            rosco.transform.localScale = new Vector3(1.1f, 0.8f, 1.6f);
-            rosco.GetComponent<Renderer>().sharedMaterial = MaterialFor(new Color(0.56f, 0.27f, 0.12f));
+            GameObject rosco = new GameObject("Rosco");
+            rosco.transform.position = new Vector3(-2f, 0.18f, -8f);
+
+            Color fur = new Color(0.56f, 0.27f, 0.12f);
+            Color lightFur = new Color(0.82f, 0.58f, 0.34f);
+            Color dark = new Color(0.025f, 0.018f, 0.015f);
+            Color collar = new Color(0.92f, 0.25f, 0.28f);
+
+            CreateRoscoPart(PrimitiveType.Sphere, "Rosco Body", rosco.transform, new Vector3(0f, 0.9f, 0f), new Vector3(1.25f, 0.78f, 1.55f), fur, Quaternion.identity);
+            CreateRoscoPart(PrimitiveType.Sphere, "Rosco Head", rosco.transform, new Vector3(0f, 1.45f, 0.95f), new Vector3(0.92f, 0.86f, 0.9f), fur, Quaternion.identity);
+            CreateRoscoPart(PrimitiveType.Sphere, "Rosco Muzzle", rosco.transform, new Vector3(0f, 1.25f, 1.62f), new Vector3(0.5f, 0.34f, 0.42f), lightFur, Quaternion.identity);
+            CreateRoscoPart(PrimitiveType.Sphere, "Rosco Nose", rosco.transform, new Vector3(0f, 1.3f, 1.98f), new Vector3(0.18f, 0.14f, 0.14f), dark, Quaternion.identity);
+
+            CreateRoscoPart(PrimitiveType.Capsule, "Rosco Ear Left", rosco.transform, new Vector3(-0.48f, 1.9f, 0.82f), new Vector3(0.28f, 0.62f, 0.24f), fur, Quaternion.Euler(0f, 0f, -18f));
+            CreateRoscoPart(PrimitiveType.Capsule, "Rosco Ear Right", rosco.transform, new Vector3(0.48f, 1.9f, 0.82f), new Vector3(0.28f, 0.62f, 0.24f), fur, Quaternion.Euler(0f, 0f, 18f));
+            CreateRoscoPart(PrimitiveType.Sphere, "Rosco Eye Left", rosco.transform, new Vector3(-0.31f, 1.62f, 1.68f), new Vector3(0.1f, 0.12f, 0.08f), dark, Quaternion.identity);
+            CreateRoscoPart(PrimitiveType.Sphere, "Rosco Eye Right", rosco.transform, new Vector3(0.31f, 1.62f, 1.68f), new Vector3(0.1f, 0.12f, 0.08f), dark, Quaternion.identity);
+
+            CreateRoscoPart(PrimitiveType.Capsule, "Rosco Front Leg Left", rosco.transform, new Vector3(-0.43f, 0.38f, 0.62f), new Vector3(0.25f, 0.55f, 0.25f), lightFur, Quaternion.identity);
+            CreateRoscoPart(PrimitiveType.Capsule, "Rosco Front Leg Right", rosco.transform, new Vector3(0.43f, 0.38f, 0.62f), new Vector3(0.25f, 0.55f, 0.25f), lightFur, Quaternion.identity);
+            CreateRoscoPart(PrimitiveType.Capsule, "Rosco Back Leg Left", rosco.transform, new Vector3(-0.43f, 0.38f, -0.58f), new Vector3(0.28f, 0.6f, 0.28f), fur, Quaternion.identity);
+            CreateRoscoPart(PrimitiveType.Capsule, "Rosco Back Leg Right", rosco.transform, new Vector3(0.43f, 0.38f, -0.58f), new Vector3(0.28f, 0.6f, 0.28f), fur, Quaternion.identity);
+            CreateRoscoPart(PrimitiveType.Capsule, "Rosco Tail", rosco.transform, new Vector3(0f, 1.08f, -1.25f), new Vector3(0.2f, 0.72f, 0.2f), lightFur, Quaternion.Euler(-35f, 0f, 0f));
+            CreateRoscoPart(PrimitiveType.Cylinder, "Rosco Collar", rosco.transform, new Vector3(0f, 1.62f, 0.92f), new Vector3(0.52f, 0.07f, 0.52f), collar, Quaternion.identity);
+
             RoscoCompanion companion = rosco.AddComponent<RoscoCompanion>();
             SerializedObject serialized = new SerializedObject(companion);
             serialized.FindProperty("player").objectReferenceValue = GameObject.Find("Marcelo").transform;
             serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void CreateRoscoPart(
+            PrimitiveType type,
+            string name,
+            Transform parent,
+            Vector3 localPosition,
+            Vector3 localScale,
+            Color color,
+            Quaternion rotation)
+        {
+            GameObject part = GameObject.CreatePrimitive(type);
+            part.name = name;
+            part.transform.SetParent(parent);
+            part.transform.localPosition = localPosition;
+            part.transform.localScale = localScale;
+            part.transform.localRotation = rotation;
+            part.GetComponent<Renderer>().sharedMaterial = MaterialFor(color);
+            Object.DestroyImmediate(part.GetComponent<Collider>());
         }
 
         private static void CreateWorldController()
