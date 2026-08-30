@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+.env
+.DS_Store
+data/activity_log.jsonl
+reports/
+STOCK_CAREER_PLAN_DRIVE.html
+STOCK_CAREER_PLAN.md
+TARGET_ROLE.md
+green_machine_data/
+unity/Library/
+unity/Logs/
+unity/Temp/
+unity/obj/
+unity/UserSettings/

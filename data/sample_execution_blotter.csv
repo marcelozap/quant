@@ -1,0 +1,7 @@
+symbol,side,quantity,fill_price,arrival_price,decision_price,venue,strategy,asset_class
+AAPL,BUY,1000,211.40,211.28,211.15,XNAS,open_rebalance,EQUITY
+MSFT,SELL,750,429.10,429.32,429.40,BATS,open_rebalance,EQUITY
+NVDA,BUY,300,1148.25,1147.70,1146.90,XNAS,urgent_follow_through,EQUITY
+SPY,SELL,1200,531.18,531.30,531.34,ARCA,index_hedge,EQUITY
+EURUSD,BUY,250000,1.0824,1.0822,1.0821,FXALL,cash_fx,FX
+USDJPY,SELL,300000,156.31,156.36,156.40,FXALL,cash_fx,FX

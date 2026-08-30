@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#102b27" />
+    <title>Green Machine Park</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#park" aria-label="Return to park entrance">
+          <span class="brand-mark">GM</span>
+          <span>Green Machine <b>Park</b></span>
+        </a>
+        <div class="market-weather" id="market-weather">
+          <span class="pulse-dot"></span> Market weather: loading
+        </div>
+        <button class="icon-button" id="help-button" aria-label="Show controls">?</button>
+      </header>
+
+      <section class="park-wrap" id="park">
+        <aside class="ride-list" aria-label="Park map">
+          <p class="eyebrow">Choose your ride</p>
+          <button class="ride-button active" data-district="entrance">Park Map <span>01</span></button>
+          <button class="ride-button" data-district="semis">Semiconductor Speedway <span>02</span></button>
+          <button class="ride-button" data-district="macro">Macro Mountain <span>03</span></button>
+          <button class="ride-button" data-district="earnings">Earnings Arcade <span>04</span></button>
+          <button class="ride-button" data-district="tape">Tape Tunnel <span>05</span></button>
+          <button class="ride-button" data-district="signals">Signal Square <span>06</span></button>
+        </aside>
+
+        <section class="park-stage" aria-label="Green Machine interactive park">
+          <div class="sky"></div>
+          <div class="sun"></div>
+          <div class="cloud cloud-one"></div><div class="cloud cloud-two"></div>
+          <div class="hills hill-back"></div><div class="hills hill-front"></div>
+          <div class="park-grid"></div>
+          <div class="path path-a"></div><div class="path path-b"></div>
+          <div class="district semis" data-district="semis" tabindex="0" role="button" aria-label="Visit Semiconductor Speedway">
+            <span class="district-icon">⚡</span><strong>Semiconductor<br />Speedway</strong><small>NVDA · AMD · TSM</small>
+          </div>
+          <div class="district macro" data-district="macro" tabindex="0" role="button" aria-label="Visit Macro Mountain">
+            <span class="district-icon">◒</span><strong>Macro<br />Mountain</strong><small>Rates · FX · Futures</small>
+          </div>
+          <div class="district earnings" data-district="earnings" tabindex="0" role="button" aria-label="Visit Earnings Arcade">
+            <span class="district-icon">★</span><strong>Earnings<br />Arcade</strong><small>Dates · setups · risk</small>
+          </div>
+          <div class="district tape" data-district="tape" tabindex="0" role="button" aria-label="Visit Tape Tunnel">
+            <span class="district-icon">↯</span><strong>Tape<br />Tunnel</strong><small>Price · volume · flow</small>
+          </div>
+          <div class="district signals" data-district="signals" tabindex="0" role="button" aria-label="Visit Signal Square">
+            <span class="district-icon">✦</span><strong>Signal<br />Square</strong><small>News · notes · review</small>
+          </div>
+          <div class="park-gate" data-district="entrance" tabindex="0" role="button" aria-label="Open park map">
+            <span>GREEN</span><b>MACHINE</b><i>PARK</i>
+          </div>
+          <div class="player" id="player" aria-label="Your park avatar"><span></span></div>
+          <p class="walk-hint">Click a ride or use arrow keys / WASD to wander</p>
+        </section>
+
+        <aside class="daily-card">
+          <p class="eyebrow">Today at the park</p>
+          <h2 id="daily-title">Start with the map.</h2>
+          <p id="daily-copy">Your job is to turn noise into a small number of observations worth carrying forward.</p>
+          <div class="song-card">
+            <span class="song-note">♫</span>
+            <div><small>One song a day</small><strong id="song-value">Add today's song</strong></div>
+            <button id="song-edit" class="text-button">edit</button>
+          </div>
+          <div class="daily-actions">
+            <button class="primary-button" id="daily-review">Write daily note</button>
+            <button class="secondary-button" id="reset-demo">Reset demo</button>
+          </div>
+        </aside>
+      </section>
+
+      <section class="ticker-ribbon" aria-label="Watched symbols" id="ticker-ribbon"></section>
+    </main>
+
+    <dialog id="district-dialog" class="district-dialog">
+      <button class="dialog-close" id="dialog-close" aria-label="Close">×</button>
+      <p class="eyebrow" id="dialog-eyebrow"></p>
+      <h1 id="dialog-title"></h1>
+      <p class="dialog-lede" id="dialog-lede"></p>
+      <div class="dialog-grid" id="dialog-content"></div>
+    </dialog>
+
+    <dialog id="help-dialog" class="district-dialog help-dialog">
+      <button class="dialog-close" id="help-close" aria-label="Close">×</button>
+      <p class="eyebrow">How to use this</p>
+      <h1>A park for your market brain.</h1>
+      <p class="dialog-lede">This is a decision-support space, not a signal vending machine. Make the ride earn its place by leaving one clear observation or question.</p>
+      <div class="help-list">
+        <p><b>Walk the park:</b> Click a district or move your avatar with arrow keys / WASD.</p>
+        <p><b>Visit homes:</b> Open a symbol, write your thesis, and mark what would change your mind.</p>
+        <p><b>Use the news board:</b> Capture a link or headline as context to verify, not as a trade command.</p>
+        <p><b>Close the loop:</b> Write one nightly note and one song. Your history becomes useful when it has structure.</p>
+      </div>
+    </dialog>
+    <script src="app.js"></script>
+  </body>
+</html>
