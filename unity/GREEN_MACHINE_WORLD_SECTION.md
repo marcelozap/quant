@@ -156,6 +156,17 @@ Ledger that bypasses the wall. The geometry *is* the fail-closed rule.
 6. **Encrypted at rest.** Trade history goes through `green-machine-init`
    encrypted storage. The world reads summaries, not raw account records.
 
+### Python / Unity handshake
+
+- Unity writes review intents to `unity/LocalState/xiv_intents.jsonl`.
+- Python reads intents from `unity/LocalState/xiv_intents.jsonl`.
+- Python writes sanitized receipts to `unity/LocalState/receipts.jsonl`.
+- Python may write sanitized `unity/LocalState/xiv_state.json`.
+- Unity reads `unity/LocalState/receipts.jsonl` and sanitized state summaries.
+- Unity never reads private account data.
+- Python never touches scenes, builds, assets.
+- There are no shared writes; each side owns its own local files.
+
 ### Three findings to fix before Green Machine expands
 
 Reported from a read of `Assets/Scripts/Data/LocalApiClient.cs`:
@@ -255,6 +266,18 @@ terminal-only, forever.
 
 Applies to every string a player reads. Enforce in review; a Unity string test is
 listed in §8.
+
+### Required in-world boundary text
+
+These four lines must appear in the Green Machine section as signs, kiosk
+footers, or Receipt Ledger helper text:
+
+```text
+System proposes; never executes trades.
+Educational research only.
+Missing data stays UNKNOWN.
+Failed gate means no execution payload.
+```
 
 | Never write | Always write |
 |---|---|
