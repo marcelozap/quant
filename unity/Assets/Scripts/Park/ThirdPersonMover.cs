@@ -13,9 +13,12 @@ namespace GreenMachine.Park
         [SerializeField] private float acceleration = 24f;
         [SerializeField] private float runAcceleration = 32f;
         [SerializeField] private float deceleration = 30f;
+        [SerializeField] private float fallResetHeight = -10f;
 
         private Vector3 clickDestination;
         private bool hasClickDestination;
+        private Vector3 spawnPosition;
+        private Quaternion spawnRotation;
 
         private CharacterController controller;
         private Vector3 velocity;
@@ -24,10 +27,21 @@ namespace GreenMachine.Park
         public float CurrentSpeed => planarVelocity.magnitude;
         public bool IsRunning { get; private set; }
 
-        private void Awake() => controller = GetComponent<CharacterController>();
+        private void Awake()
+        {
+            controller = GetComponent<CharacterController>();
+            spawnPosition = transform.position;
+            spawnRotation = transform.rotation;
+        }
 
         private void Update()
         {
+            if (transform.position.y < fallResetHeight)
+            {
+                ResetToSpawn();
+                return;
+            }
+
             if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame && TrySetClickDestination())
             {
                 hasClickDestination = true;
@@ -62,6 +76,16 @@ namespace GreenMachine.Park
             velocity.y += Physics.gravity.y * Time.deltaTime;
             if (controller.isGrounded && velocity.y < 0f) velocity.y = -2f;
             controller.Move((planarVelocity + velocity) * Time.deltaTime);
+        }
+
+        public void ResetToSpawn()
+        {
+            hasClickDestination = false;
+            velocity = Vector3.zero;
+            planarVelocity = Vector3.zero;
+            controller.enabled = false;
+            transform.SetPositionAndRotation(spawnPosition, spawnRotation);
+            controller.enabled = true;
         }
 
         private bool ReadRunInput()
