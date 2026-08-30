@@ -181,6 +181,16 @@ namespace GreenMachine.Editor
             CreatePart(PrimitiveType.Cube, "Left Gate Door", parent, new Vector3(-2.1f, 2.2f, 0.18f), new Vector3(0.55f, 4.4f, 0.65f), coral);
             CreatePart(PrimitiveType.Cube, "Right Gate Door", parent, new Vector3(2.1f, 2.2f, 0.18f), new Vector3(0.55f, 4.4f, 0.65f), coral);
 
+            foreach (float x in new[] { -5f, 5f })
+            {
+                string side = x < 0f ? "Left" : "Right";
+                CreatePart(PrimitiveType.Cylinder, $"{side} Tower Crown Lower", parent, new Vector3(x, 7.18f, 0f), new Vector3(3.2f, 0.3f, 3.2f), trim);
+                CreatePart(PrimitiveType.Cylinder, $"{side} Tower Crown Upper", parent, new Vector3(x, 7.8f, 0f), new Vector3(2.35f, 0.22f, 2.35f), accentColor);
+                CreatePart(PrimitiveType.Cube, $"{side} Ticket Window", parent, new Vector3(x, 2.8f, -2.78f), new Vector3(1.05f, 0.68f, 0.1f), trim);
+                CreatePart(PrimitiveType.Cube, $"{side} Ticket Awning", parent, new Vector3(x, 3.65f, -2.95f), new Vector3(1.35f, 0.1f, 0.42f), coral);
+                CreatePlanter(parent, $"{side} Gate Planter", new Vector3(x * 1.55f, 0f, -2.2f), accentColor);
+            }
+
             for (int i = -1; i <= 1; i++)
             {
                 CreatePart(PrimitiveType.Cube, $"Left Gate Light {i + 2}", parent, new Vector3(-5f, 2.2f + i * 1.55f, -1.43f), new Vector3(0.48f, 0.7f, 0.12f), accentColor);
@@ -201,6 +211,16 @@ namespace GreenMachine.Editor
             signText.fontSize = 72;
             signText.fontStyle = FontStyle.Bold;
             signText.color = Color.white;
+        }
+
+        private static void CreatePlanter(Transform parent, string name, Vector3 position, Color flowerColor)
+        {
+            GameObject planter = new GameObject(name);
+            planter.transform.SetParent(parent);
+            planter.transform.localPosition = position;
+            CreatePart(PrimitiveType.Cube, "Planter Box", planter.transform, new Vector3(0f, 0.45f, 0f), new Vector3(0.9f, 0.45f, 0.58f), new Color(0.65f, 0.3f, 0.12f));
+            CreatePart(PrimitiveType.Sphere, "Planter Leaves", planter.transform, new Vector3(0f, 1.2f, 0f), new Vector3(0.78f, 0.56f, 0.58f), new Color(0.12f, 0.52f, 0.24f));
+            CreatePart(PrimitiveType.Sphere, "Planter Flower", planter.transform, new Vector3(0.32f, 1.52f, -0.08f), new Vector3(0.18f, 0.18f, 0.18f), flowerColor);
         }
 
         private static void CreateArchiveGarden(Transform parent, Color accentColor)
