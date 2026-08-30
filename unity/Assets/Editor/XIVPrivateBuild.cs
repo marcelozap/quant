@@ -8,6 +8,9 @@ namespace GreenMachine.Editor
     {
         private const string ScenePath = "Assets/Scenes/XIVWorld.unity";
         private const string OutputPath = "Builds/XIV/XIV.app";
+        private const string ProductName = "XIV";
+        private const string CompanyName = "Marcelo Zapata";
+        private const string BundleVersion = "0.1.0";
 
         [MenuItem("XIV/Build Private macOS App")]
         public static void BuildMacApp()
@@ -34,6 +37,7 @@ namespace GreenMachine.Editor
 
             if (!XIVWorldValidator.ValidateFirstWorldScene()) return false;
 
+            ConfigurePrivateBuild();
             EditorBuildSettings.scenes = new[]
             {
                 new EditorBuildSettingsScene(ScenePath, true),
@@ -51,6 +55,14 @@ namespace GreenMachine.Editor
             if (report.summary.result == BuildResult.Succeeded) return true;
             UnityEngine.Debug.LogError($"XIV build failed: {report.summary.result}. Errors: {report.summary.totalErrors}.");
             return false;
+        }
+
+        private static void ConfigurePrivateBuild()
+        {
+            PlayerSettings.productName = ProductName;
+            PlayerSettings.companyName = CompanyName;
+            PlayerSettings.bundleVersion = BundleVersion;
+            PlayerSettings.runInBackground = false;
         }
     }
 }
