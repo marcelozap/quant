@@ -95,6 +95,12 @@ namespace GreenMachine.Editor
         {
             GameObject root = new GameObject(districtName);
             root.transform.position = position;
+            if (districtName == "Green Gate")
+            {
+                CreateGreenGate(root.transform, color);
+                return;
+            }
+
             GameObject building = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             building.name = $"{districtName} Landmark";
             building.transform.SetParent(root.transform);
@@ -118,6 +124,70 @@ namespace GreenMachine.Editor
             text.characterSize = 0.45f;
             text.fontSize = 48;
             text.color = Color.white;
+        }
+
+        private static void CreateGreenGate(Transform parent, Color accentColor)
+        {
+            Color stone = new Color(0.07f, 0.24f, 0.25f);
+            Color trim = new Color(0.93f, 0.77f, 0.35f);
+            Color coral = new Color(0.92f, 0.35f, 0.34f);
+
+            CreatePart(PrimitiveType.Cylinder, "Left Gate Tower", parent, new Vector3(-5f, 3.4f, 0f), new Vector3(2.8f, 3.4f, 2.8f), stone);
+            CreatePart(PrimitiveType.Cylinder, "Right Gate Tower", parent, new Vector3(5f, 3.4f, 0f), new Vector3(2.8f, 3.4f, 2.8f), stone);
+            CreatePart(PrimitiveType.Cube, "Gate Header", parent, new Vector3(0f, 6.2f, 0f), new Vector3(10.8f, 1.4f, 1.4f), stone);
+            CreatePart(PrimitiveType.Cube, "Gold Header Trim", parent, new Vector3(0f, 7f, -0.04f), new Vector3(11.3f, 0.16f, 1.55f), trim);
+            CreatePart(PrimitiveType.Cube, "Left Gate Door", parent, new Vector3(-2.1f, 2.2f, 0.18f), new Vector3(0.55f, 4.4f, 0.65f), coral);
+            CreatePart(PrimitiveType.Cube, "Right Gate Door", parent, new Vector3(2.1f, 2.2f, 0.18f), new Vector3(0.55f, 4.4f, 0.65f), coral);
+
+            for (int i = -1; i <= 1; i++)
+            {
+                CreatePart(PrimitiveType.Cube, $"Left Gate Light {i + 2}", parent, new Vector3(-5f, 2.2f + i * 1.55f, -1.43f), new Vector3(0.48f, 0.7f, 0.12f), accentColor);
+                CreatePart(PrimitiveType.Cube, $"Right Gate Light {i + 2}", parent, new Vector3(5f, 2.2f + i * 1.55f, -1.43f), new Vector3(0.48f, 0.7f, 0.12f), accentColor);
+            }
+
+            CreatePointLight(parent, "Left Gate Glow", new Vector3(-4.2f, 4.3f, -1.8f), accentColor);
+            CreatePointLight(parent, "Right Gate Glow", new Vector3(4.2f, 4.3f, -1.8f), coral);
+
+            GameObject sign = new GameObject("XIV Gate Sign");
+            sign.transform.SetParent(parent);
+            sign.transform.localPosition = new Vector3(0f, 6.35f, -0.78f);
+            TextMesh signText = sign.AddComponent<TextMesh>();
+            signText.text = "XIV";
+            signText.anchor = TextAnchor.MiddleCenter;
+            signText.alignment = TextAlignment.Center;
+            signText.characterSize = 0.95f;
+            signText.fontSize = 72;
+            signText.fontStyle = FontStyle.Bold;
+            signText.color = Color.white;
+        }
+
+        private static GameObject CreatePart(
+            PrimitiveType type,
+            string name,
+            Transform parent,
+            Vector3 localPosition,
+            Vector3 localScale,
+            Color color)
+        {
+            GameObject part = GameObject.CreatePrimitive(type);
+            part.name = name;
+            part.transform.SetParent(parent);
+            part.transform.localPosition = localPosition;
+            part.transform.localScale = localScale;
+            part.GetComponent<Renderer>().sharedMaterial = MaterialFor(color);
+            return part;
+        }
+
+        private static void CreatePointLight(Transform parent, string name, Vector3 localPosition, Color color)
+        {
+            GameObject lightObject = new GameObject(name);
+            lightObject.transform.SetParent(parent);
+            lightObject.transform.localPosition = localPosition;
+            Light light = lightObject.AddComponent<Light>();
+            light.type = LightType.Point;
+            light.color = color;
+            light.intensity = 3f;
+            light.range = 12f;
         }
 
         private static void CreatePlayer()
