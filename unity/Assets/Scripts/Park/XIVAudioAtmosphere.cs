@@ -34,6 +34,7 @@ namespace GreenMachine.Park
         private float currentEnergy;
         private Light[] reactiveLights = System.Array.Empty<Light>();
         private Renderer[] reactiveRenderers = System.Array.Empty<Renderer>();
+        private XIVWindMotion[] reactiveMotion = System.Array.Empty<XIVWindMotion>();
 
         public float CurrentEnergy => currentEnergy;
         public float CurrentBeatPulse { get; private set; }
@@ -48,6 +49,7 @@ namespace GreenMachine.Park
             currentEnergy = Mathf.Lerp(currentEnergy, Mathf.Clamp01(targetEnergy), responseSpeed * Time.deltaTime);
             CurrentBeatPulse = ReadBeatPulse();
             if (worldController != null) worldController.SetMarketEnergy(currentEnergy);
+            ApplyMotionResponse();
             ApplyLightResponse();
         }
 
@@ -59,6 +61,7 @@ namespace GreenMachine.Park
             Renderer[] allRenderers = FindObjectsByType<Renderer>(FindObjectsSortMode.None);
             reactiveRenderers = System.Array.FindAll(allRenderers, renderer =>
                 renderer != null && (renderer.name.Contains("Glow") || renderer.name.Contains("Beacon") || renderer.name.Contains("Lantern")));
+            reactiveMotion = FindObjectsByType<XIVWindMotion>(FindObjectsSortMode.None);
             foreach (Renderer renderer in reactiveRenderers)
             {
                 if (renderer == null || renderer.sharedMaterial == null) continue;
@@ -221,6 +224,15 @@ namespace GreenMachine.Park
                 materialProperties.Clear();
                 materialProperties.SetColor("_EmissionColor", emission);
                 renderer.SetPropertyBlock(materialProperties);
+            }
+        }
+
+        private void ApplyMotionResponse()
+        {
+            float visualEnergy = Mathf.Clamp01(currentEnergy + CurrentBeatPulse * beatPulseStrength);
+            foreach (XIVWindMotion motion in reactiveMotion)
+            {
+                if (motion != null) motion.SetAudioEnergy(visualEnergy);
             }
         }
 

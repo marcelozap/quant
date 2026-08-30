@@ -80,6 +80,8 @@ namespace GreenMachine.Editor
             GameObject route = GameObject.Find("Green Gate to Archive Garden Route");
             int routeDiscoveries = route == null ? 0 : route.GetComponentsInChildren<RoscoInterestPoint>(true).Length;
             Check(routeDiscoveries >= 3, "First route has at least three Rosco discoveries", ref passed, ref failed);
+            int routeMotionProps = route == null ? 0 : route.GetComponentsInChildren<XIVWindMotion>(true).Length;
+            Check(routeMotionProps >= 3, "First route has audio-reactive motion props", ref passed, ref failed);
             Check(GameObject.Find("XIV Audio Atmosphere")?.GetComponent<XIVAudioAtmosphere>() != null, "Audio atmosphere exists", ref passed, ref failed);
             Check(GameObject.Find("XIV Audio Atmosphere")?.GetComponent<AudioSource>() != null, "Audio source exists", ref passed, ref failed);
             Check(GameObject.Find("XIV Walk Session")?.GetComponent<XIVWalkSession>() != null, "Walk session exists", ref passed, ref failed);
