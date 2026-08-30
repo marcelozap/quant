@@ -278,6 +278,24 @@ namespace GreenMachine.Editor
             signText.fontSize = 48;
             signText.color = Color.white;
             sign.AddComponent<XIVBillboard>();
+
+            GameObject summary = new GameObject("XIV Session Summary");
+            summary.transform.SetParent(parent);
+            summary.transform.localPosition = new Vector3(0f, 2.1f, -4.5f);
+            TextMesh summaryText = summary.AddComponent<TextMesh>();
+            summaryText.text = "ARCHIVE GARDEN\nWALK SAVES HERE";
+            summaryText.anchor = TextAnchor.MiddleCenter;
+            summaryText.alignment = TextAlignment.Center;
+            summaryText.characterSize = 0.23f;
+            summaryText.fontSize = 36;
+            summaryText.color = Color.white;
+            summary.AddComponent<XIVBillboard>();
+
+            XIVSessionSummary sessionSummary = summary.AddComponent<XIVSessionSummary>();
+            SerializedObject summarySerialized = new SerializedObject(sessionSummary);
+            summarySerialized.FindProperty("display").objectReferenceValue = summaryText;
+            summarySerialized.FindProperty("session").objectReferenceValue = GameObject.Find("XIV Walk Session").GetComponent<XIVWalkSession>();
+            summarySerialized.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private static GameObject CreatePart(

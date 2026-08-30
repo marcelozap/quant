@@ -71,6 +71,7 @@ namespace GreenMachine.Editor
             Check(archiveGarden?.GetComponent<XIVWalkDestination>() != null, "Archive Garden completes the walk", ref passed, ref failed);
             SphereCollider destinationTrigger = archiveGarden?.GetComponent<SphereCollider>();
             Check(destinationTrigger != null && destinationTrigger.isTrigger, "Archive Garden has a trigger destination", ref passed, ref failed);
+            Check(GameObject.Find("XIV Session Summary")?.GetComponent<XIVSessionSummary>() != null, "Archive Garden has a session summary", ref passed, ref failed);
             Check(greenGate != null && archiveGarden != null && archiveGarden.transform.position.z > greenGate.transform.position.z,
                 "Archive Garden sits beyond Green Gate", ref passed, ref failed);
             Check(GameObject.Find("Green Gate to Archive Garden Route") != null, "First walking route exists", ref passed, ref failed);

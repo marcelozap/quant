@@ -89,7 +89,7 @@ These are destinations, not dashboard panels pasted into a game. The world shoul
 
 The current builder already creates the first Green Gate and Archive Garden landmarks, a dressed route blockout, Rosco interest points, and a local `XIVAudioAtmosphere` component. Interest points pulse as small route landmarks and change state when Rosco discovers them. `RoscoCompanion` also exposes an optional animator handoff for speed, state, investigation, and celebration, uses a distance band for natural catch-up, and can rejoin Marcelo after a large transfer. A final skinned Rosco can replace the placeholder without rewriting the route logic. These are foundations for the gates below, not evidence that the final art or audio experience is complete.
 
-It also creates `XIVWalkSession`, which records only local walk duration, distance, Rosco discoveries, and peak atmosphere energy. This is the first save boundary for the world; it does not import or serialize Green Machine trade data.
+It also creates `XIVWalkSession`, which records only local walk duration, distance, Rosco discoveries, and peak atmosphere energy, plus an Archive Garden summary marker that presents the saved result at the end of the route. This is the first save boundary for the world; it does not import or serialize Green Machine trade data.
 
 The generated Earnings Arcade also contains a read-only Green Machine board. It can show today's local review and song memory through `/world/today`, but it degrades to an explicit offline state and never places orders.
 
