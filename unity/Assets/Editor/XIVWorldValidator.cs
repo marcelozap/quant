@@ -11,6 +11,17 @@ namespace GreenMachine.Editor
     public static class XIVWorldValidator
     {
         private const string ScenePath = "Assets/Scenes/XIVWorld.unity";
+        private static readonly string[] RequiredLandmarks =
+        {
+            "Green Gate",
+            "Semiconductor Speedway",
+            "Macro Mountain",
+            "Earnings Arcade",
+            "Tape Tunnel",
+            "Signal Square",
+            "Account Observatory",
+            "Archive Garden",
+        };
 
         [MenuItem("XIV/Validate First Playable World")]
         public static void ValidateFirstWorld()
@@ -41,7 +52,12 @@ namespace GreenMachine.Editor
             Check(scene.IsValid(), "XIVWorld scene is valid", ref passed, ref failed);
             Check(GameObject.Find("Marcelo")?.GetComponent<CharacterController>() != null, "Marcelo has a CharacterController", ref passed, ref failed);
             Check(GameObject.Find("Marcelo")?.GetComponent<ThirdPersonMover>() != null, "Marcelo has ThirdPersonMover", ref passed, ref failed);
+            Check(GameObject.Find("Main Camera")?.GetComponent<ThirdPersonCamera>() != null, "Main Camera has ThirdPersonCamera", ref passed, ref failed);
             Check(GameObject.Find("Rosco")?.GetComponent<RoscoCompanion>() != null, "Rosco has RoscoCompanion", ref passed, ref failed);
+            foreach (string landmark in RequiredLandmarks)
+            {
+                Check(GameObject.Find(landmark) != null, $"Landmark exists: {landmark}", ref passed, ref failed);
+            }
             GameObject greenGate = GameObject.Find("Green Gate");
             Check(greenGate != null, "Green Gate exists", ref passed, ref failed);
             Check(GameObject.Find("XIV Gate Sign")?.GetComponent<XIVBillboard>() != null, "Green Gate sign faces the camera", ref passed, ref failed);
@@ -58,6 +74,8 @@ namespace GreenMachine.Editor
             Check(GameObject.Find("XIV Audio Atmosphere")?.GetComponent<XIVAudioAtmosphere>() != null, "Audio atmosphere exists", ref passed, ref failed);
             Check(GameObject.Find("XIV Audio Atmosphere")?.GetComponent<AudioSource>() != null, "Audio source exists", ref passed, ref failed);
             Check(GameObject.Find("XIV Walk Session")?.GetComponent<XIVWalkSession>() != null, "Walk session exists", ref passed, ref failed);
+            Check(GameObject.Find("Park World Controller")?.GetComponent<ParkWorldController>() != null, "World controller exists", ref passed, ref failed);
+            Check(GameObject.Find("Park Fast Travel")?.GetComponent<ParkFastTravel>() != null, "Fast travel registry exists", ref passed, ref failed);
             Check(GameObject.Find("Green Machine Read Only Board")?.GetComponent<GreenMachineBoard>() != null, "Green Machine board is read-only", ref passed, ref failed);
             Check(GameObject.Find("XIV Systems Board")?.GetComponent<XIVSystemsBoard>() != null, "XIV Systems board exists", ref passed, ref failed);
 
