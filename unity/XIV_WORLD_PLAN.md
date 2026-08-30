@@ -2,7 +2,7 @@
 
 ## North star
 
-XIV is a private personal video game world for Marcelo. It is a place to return to when he wants to walk, think, create, review, or reset.
+XIV is a private personal video game world for Marcelo. It is a place to return to when he wants to walk, think, create, review, or reset. The project can be authored on the Mac and validated on the home PC; the Unity core stays cross-platform and local-first.
 
 The first year is not an attempt to reproduce the content volume of a large commercial open-world game. It uses an AAA standard of care for a smaller world: responsive movement, believable companion behavior, authored spaces, strong camera work, layered sound, readable interaction, stable saves, and environmental detail that rewards attention.
 
@@ -152,7 +152,7 @@ The generated Semiconductor Speedway also contains an XIV Systems board. It prov
 
 ### Month 11: polish and reliability
 
-- Profile CPU, GPU, memory, loading, and save behavior on the home Mac.
+- Profile CPU, GPU, memory, loading, and save behavior on the home PC and the development Mac.
 - Improve animation blending, foot placement, camera framing, audio mixing, and lighting.
 - Add settings for volume, reduced motion, input, and display quality.
 - Test interrupted saves, missing media, unavailable local API, and bad source records.

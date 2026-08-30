@@ -1,6 +1,6 @@
 # XIV World
 
-This is the Unity 6 LTS scaffold for XIV, Marcelo's private personal world on Mac. The world is centered on walking Rosco, with MaloSound as the music lane and Green Machine as the local market/data lane.
+This is the Unity 6 LTS scaffold for XIV, Marcelo's private personal world. Development can begin on the Mac, while the home PC is the intended GPU/audio validation machine. The world is centered on walking Rosco, with MaloSound as the music lane and Green Machine as the local market/data lane.
 
 The current scene is an intentional blockout. It contains original placeholder geometry only; it is safe to replace with the high-detail Blender asset pipeline as the walk loop becomes trustworthy.
 
@@ -8,7 +8,7 @@ The full 12-month direction lives in [`XIV_WORLD_PLAN.md`](./XIV_WORLD_PLAN.md).
 
 ## Open the first playable park
 
-1. Install Unity Hub and Unity `6000.0.41f1` with macOS build support.
+1. Install Unity Hub and Unity `6000.0.41f1` with the build support for the machine you are testing on.
 2. Open this `unity/` folder as a Unity project.
 3. Wait for Package Manager to install URP, Input System, AI Navigation, and Timeline.
 4. Select **XIV -> Create First Playable World** in the Unity editor menu.
@@ -20,7 +20,7 @@ Use `WASD` or the arrow keys to walk. Hold the right mouse button and drag to or
 
 The eight landmarks are a map of future XIV spaces, not a promise to build eight full districts immediately. The first production milestone is the Green Gate to Archive Garden walking route.
 
-The generated world also includes `XIVAudioAtmosphere`, `XIVWalkSession`, `XIVWalkDestination`, a Green Machine read-only board, and an XIV Systems board. Reaching Archive Garden completes the first walk, records the destination, celebrates with Rosco, and saves locally. Set `XIV_AUDIO_PATH` to a local MP3, WAV, or OGG file, or call `LoadMusicFile` from a future media selector; the clip is analyzed locally and its energy is sent to the world lighting. MaloSound can provide an explicit BPM and offset through `SetBeatGrid`, or XIV can load the exact `AudioAnalysisV1` JSON shape from `XIV_AUDIO_ANALYSIS_PATH`; invalid or missing timing data disables beat pulses rather than guessing. The Green Machine board reads `/world/today` from the loopback API when available and displays an offline state otherwise. The XIV Systems board reads an optional local `XIV/systems.json` file and falls back to the three-lane identity. Walk summaries are autosaved to the Mac's application data directory. Audio files, session saves, tokens, and private data should stay outside Git.
+The generated world also includes `XIVAudioAtmosphere`, `XIVWalkSession`, `XIVWalkDestination`, a Green Machine read-only board, and an XIV Systems board. Reaching Archive Garden completes the first walk, records the destination, celebrates with Rosco, and saves locally. Set `XIV_AUDIO_PATH` to a local MP3, WAV, or OGG file, or call `LoadMusicFile` from a future media selector; the clip is analyzed locally and its energy is sent to the world lighting. MaloSound can provide an explicit BPM and offset through `SetBeatGrid`, or XIV can load the exact `AudioAnalysisV1` JSON shape from `XIV_AUDIO_ANALYSIS_PATH`; invalid or missing timing data disables beat pulses rather than guessing. The Green Machine board reads `/world/today` from the loopback API when available and displays an offline state otherwise. The XIV Systems board reads an optional local `XIV/systems.json` file and falls back to the three-lane identity. Walk summaries are autosaved to the local application's data directory on whichever machine runs the build. Audio files, session saves, tokens, and private data should stay outside Git.
 
 ## Local API
 

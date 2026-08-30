@@ -72,7 +72,7 @@ quant-live research-pack semis indexes megacap
 
 ## XIV World and Green Machine
 
-XIV is the private Unity world built around walking Rosco. MaloSound is its music and creative-technology lane. Green Machine is the local market/data lane that supplies research, trade journaling, backtesting, and descriptive review.
+XIV is the private Unity world built around walking Rosco. MaloSound is its music and creative-technology lane. Green Machine is the local market/data lane that supplies research, trade journaling, backtesting, and descriptive review. The Mac is a development surface; the home PC is the intended GPU/audio validation machine.
 
 The Unity 6 LTS world scaffold and its 12-month build contract live in [`unity/`](./unity/) and [`unity/XIV_WORLD_PLAN.md`](./unity/XIV_WORLD_PLAN.md). The core walk remains useful with the data service turned off.
 
