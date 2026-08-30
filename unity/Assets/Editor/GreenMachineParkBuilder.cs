@@ -136,6 +136,11 @@ namespace GreenMachine.Editor
                 CreateGreenGate(root.transform, color);
                 return;
             }
+            if (districtName == "Archive Garden")
+            {
+                CreateArchiveGarden(root.transform, color);
+                return;
+            }
 
             GameObject building = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             building.name = $"{districtName} Landmark";
@@ -194,6 +199,48 @@ namespace GreenMachine.Editor
             signText.characterSize = 0.95f;
             signText.fontSize = 72;
             signText.fontStyle = FontStyle.Bold;
+            signText.color = Color.white;
+        }
+
+        private static void CreateArchiveGarden(Transform parent, Color accentColor)
+        {
+            Color ground = new Color(0.08f, 0.22f, 0.18f);
+            Color stone = new Color(0.18f, 0.28f, 0.3f);
+            Color flower = new Color(0.95f, 0.56f, 0.76f);
+            Color memory = new Color(0.52f, 0.75f, 0.95f);
+
+            CreatePart(PrimitiveType.Cylinder, "Archive Garden Plinth", parent, new Vector3(0f, 0.28f, 0f), new Vector3(5.2f, 0.28f, 5.2f), ground);
+            CreatePart(PrimitiveType.Cylinder, "Archive Memory Marker", parent, new Vector3(0f, 1.25f, 0f), new Vector3(0.65f, 1.25f, 0.65f), memory);
+            CreatePart(PrimitiveType.Sphere, "Archive Memory Glow", parent, new Vector3(0f, 3.1f, 0f), new Vector3(0.9f, 0.9f, 0.9f), accentColor);
+            CreatePointLight(parent, "Archive Garden Glow", new Vector3(0f, 2.7f, 0f), accentColor);
+
+            Vector3[] memoryStones =
+            {
+                new Vector3(-2.8f, 0.65f, -1.8f),
+                new Vector3(-2.2f, 0.65f, 2.1f),
+                new Vector3(2.1f, 0.65f, 2.2f),
+                new Vector3(2.9f, 0.65f, -1.5f),
+            };
+            for (int i = 0; i < memoryStones.Length; i++)
+            {
+                CreatePart(PrimitiveType.Sphere, $"Memory Stone {i + 1}", parent, memoryStones[i], new Vector3(0.58f, 0.8f, 0.58f), stone);
+            }
+
+            CreateTree(parent, "Archive Tree A", new Vector3(-6.2f, 0f, -3.6f), 1.15f);
+            CreateTree(parent, "Archive Tree B", new Vector3(-6.8f, 0f, 3.5f), 0.95f);
+            CreateTree(parent, "Archive Tree C", new Vector3(6.4f, 0f, 3.2f), 1.1f);
+            CreateTree(parent, "Archive Tree D", new Vector3(6.6f, 0f, -3.6f), 0.9f);
+            CreatePointLight(parent, "Archive Flower Light", new Vector3(0f, 0.7f, -4.5f), flower);
+
+            GameObject sign = new GameObject("Archive Garden Sign");
+            sign.transform.SetParent(parent);
+            sign.transform.localPosition = new Vector3(0f, 4.2f, -0.55f);
+            TextMesh signText = sign.AddComponent<TextMesh>();
+            signText.text = "ARCHIVE GARDEN";
+            signText.anchor = TextAnchor.MiddleCenter;
+            signText.alignment = TextAlignment.Center;
+            signText.characterSize = 0.36f;
+            signText.fontSize = 48;
             signText.color = Color.white;
         }
 
