@@ -166,6 +166,7 @@ namespace GreenMachine.Editor
             text.characterSize = 0.45f;
             text.fontSize = 48;
             text.color = Color.white;
+            label.AddComponent<XIVBillboard>();
         }
 
         private static void CreateGreenGate(Transform parent, Color accentColor)
@@ -211,6 +212,7 @@ namespace GreenMachine.Editor
             signText.fontSize = 72;
             signText.fontStyle = FontStyle.Bold;
             signText.color = Color.white;
+            sign.AddComponent<XIVBillboard>();
         }
 
         private static void CreatePlanter(Transform parent, string name, Vector3 position, Color flowerColor)
@@ -268,6 +270,7 @@ namespace GreenMachine.Editor
             signText.characterSize = 0.36f;
             signText.fontSize = 48;
             signText.color = Color.white;
+            sign.AddComponent<XIVBillboard>();
         }
 
         private static GameObject CreatePart(
@@ -429,6 +432,7 @@ namespace GreenMachine.Editor
             text.characterSize = 0.19f;
             text.fontSize = 42;
             text.color = Color.white;
+            textObject.AddComponent<XIVBillboard>();
 
             LocalApiClient client = board.AddComponent<LocalApiClient>();
             GreenMachineBoard dataBoard = board.AddComponent<GreenMachineBoard>();
@@ -460,6 +464,7 @@ namespace GreenMachine.Editor
             text.characterSize = 0.19f;
             text.fontSize = 42;
             text.color = Color.white;
+            textObject.AddComponent<XIVBillboard>();
 
             XIVSystemsBoard systemsBoard = board.AddComponent<XIVSystemsBoard>();
             SerializedObject serialized = new SerializedObject(systemsBoard);

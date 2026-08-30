@@ -44,6 +44,7 @@ namespace GreenMachine.Editor
             Check(GameObject.Find("Rosco")?.GetComponent<RoscoCompanion>() != null, "Rosco has RoscoCompanion", ref passed, ref failed);
             GameObject greenGate = GameObject.Find("Green Gate");
             Check(greenGate != null, "Green Gate exists", ref passed, ref failed);
+            Check(GameObject.Find("XIV Gate Sign")?.GetComponent<XIVBillboard>() != null, "Green Gate sign faces the camera", ref passed, ref failed);
             GameObject archiveGarden = GameObject.Find("Archive Garden");
             Check(archiveGarden?.GetComponent<XIVWalkDestination>() != null, "Archive Garden completes the walk", ref passed, ref failed);
             SphereCollider destinationTrigger = archiveGarden?.GetComponent<SphereCollider>();
