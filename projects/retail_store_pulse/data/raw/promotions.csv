@@ -1,0 +1,5 @@
+item_id,promo_start,promo_end,promo_type,discount_pct
+SKU001,2026-05-22,2026-06-04,feature,15
+SKU003,2026-05-22,2026-06-04,digital coupon,20
+SKU009,2026-05-22,2026-06-04,feature,15
+SKU011,2026-05-22,2026-06-04,digital coupon,15

@@ -1,5 +1,11 @@
 # Green Machine Park: Product Plan
 
+## North Star
+
+**Green Machine is the place where Marcelo's trading history lives: a private memory palace, not a dashboard.**
+
+The market OS, performance lab, and personal archive are one experience: a physical geography for market life that makes evidence easier to revisit, remember, and learn from. Market feeds keep the park alive, but personal history, daily memory, and careful review give it a reason to exist.
+
 ## Objective
 
 Build a private, local-first market-research world that helps Marcelo turn his own trading history, market observations, events, and music into a consistent daily practice. It should feel like an amusement park, but work like a disciplined research workstation.
@@ -13,7 +19,9 @@ Green Machine is not an automated trading system, a promise of profitable signal
 3. **No fake live data.** Every displayed value shows its source and freshness. Demo data is visibly marked as demo.
 4. **No automated execution.** Green Machine can prepare research and journal reviews. It will not send orders or turn political/social posts into trade instructions.
 5. **The world has a purpose.** A park location must answer a useful question or support a repeatable habit, not exist only as decoration.
-6. **Build the data spine before deep 3D.** A beautiful world without trustworthy personal history will not solve the actual problem.
+6. **Caveats instead of signals.** Pattern plaques describe observations, sample sizes, and uncertainty. They never imply a trade instruction.
+7. **Losses get equal beauty.** World lighting, Rosco, unlocks, and the park's emotional tone never react to P&L. A negative trade is represented with the same care as a positive trade; the world may reflect sourced market state, never personal profit or loss.
+8. **The walk is optional, never a tax.** The park earns exploration through daily change, while Rosco recall and district fast travel keep every useful destination quick to reach.
 
 ## Audience and Success
 
@@ -33,8 +41,8 @@ Longer-term success is not a win-rate promise. It is a complete, searchable reco
 
 | District | Research purpose | First useful interaction |
 | --- | --- | --- |
-| Green Gate | Daily orientation | Market weather, one priority, daily song |
-| Semiconductor Speedway | Sector and stock research | Open NVDA/AMD/TSM homes; see thesis, price, event, evidence |
+| Green Gate | Arrival and daily orientation | Golden-hour arrival, sourced market weather, one priority, daily song |
+| Semiconductor Speedway | Sector and stock research | Open NVDA/AMD/TSM homes; walk a symbol's descriptive trade-stone path, then see thesis, price, event, evidence |
 | Macro Mountain | Regime and calendar | Review futures, rates, FX, scheduled macro events |
 | Earnings Arcade | Event preparation and review | Save expectations, key KPI, implied move, actual reaction |
 | Tape Tunnel | Trading journal and execution review | Compare plan, fill, exit, and behavior patterns |
@@ -125,9 +133,10 @@ The app must never overwrite original broker fields. Enrichment fields stay sepa
 **Goal:** Make the research workflow emotionally engaging without making it harder to use.
 
 - Establish art direction, avatar style, park map, accessibility contrast, motion settings, and keyboard-first navigation.
-- Build the 2D/2.5D park as the dependable navigation shell.
-- Add animated district entrances, a visible daily change log, and collectible-style research cards.
-- Prototype one 3D district using Three.js or React Three Fiber after the underlying view has clear data and navigation requirements.
+- Build the native Unity 6 LTS Mac park as the dependable navigation shell.
+- Author Green Gate and its first 40 meters, NVDA Home, and Archive Garden as the first polished loop; keep the remaining districts complete but modular and lighter-weight until their daily interactions prove useful.
+- Generate stock homes from data-driven sector prefab kits. NVDA establishes the grammar; later homes use swappable facade materials, signage, and procedural trade-stone paths with one signature prop each.
+- Add animated district entrances, a visible daily change log, accessible focused data panels, and Rosco whistle fast travel.
 - Test performance on the actual computer and provide a reduced-motion/low-graphics option.
 
 **Done when:** A user can navigate from map to an NVDA thesis, daily note, or journal review faster than through a normal sidebar.
@@ -146,11 +155,11 @@ The app must never overwrite original broker fields. Enrichment fields stay sepa
 
 ## Technical Direction
 
-- **Application:** local React + TypeScript frontend with a small local Python API, keeping the existing `quant_live` Python work useful.
-- **Storage:** SQLite, with raw files retained in a private `data/raw/` directory excluded from Git.
-- **Charts:** straightforward web charts for accuracy and speed; world visuals are a navigation layer, not chart replacements.
-- **3D:** Three.js / React Three Fiber only after the 2D data model and one district workflow are proven.
-- **Deployment:** run locally first. Packaging as a desktop app is a later decision, not a dependency for building the core.
+- **Application:** native Unity 6 LTS / C# Mac app using URP, with a loopback-only Python API that keeps existing `quant_live` work useful.
+- **Storage:** encrypted SQLite with its key in macOS Keychain; original imports are preserved inside encrypted storage and excluded from Git.
+- **Data views:** accessible focused panels for accuracy and speed; world visuals make personal history navigable rather than replacing evidence.
+- **3D:** all exterior districts are walkable from the first playable shell; polished interiors arrive in priority order.
+- **Deployment:** local Mac-only application. No cloud sync or public sharing in Version 1.
 - **Secrets:** `.env` only; no keys, account numbers, raw account snapshots, or personal trade history committed to Git.
 
 ## Current Status

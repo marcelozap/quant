@@ -62,6 +62,32 @@ def create_app(settings: Settings, store: GreenMachineStore, token: str | None =
     def journal_analytics() -> Dict[str, object]:
         return summarize_closed_trades(store.list("trade", limit=10_000))
 
+    @app.get("/journal/symbol/{symbol}/trades", dependencies=[Depends(require_token)])
+    def symbol_trade_stones(symbol: str) -> Dict[str, object]:
+        """Return the minimal, descriptive trade fields needed for a symbol path."""
+        normalized_symbol = symbol.strip().upper()
+        trades = []
+        for record in store.list("trade", limit=10_000):
+            payload = record["payload"]
+            if str(payload.get("underlying", "")).upper() != normalized_symbol:
+                continue
+            trades.append(
+                {
+                    "closed_date": payload.get("closed_date"),
+                    "gain_loss": payload.get("gain_loss"),
+                    "return_pct": payload.get("return_pct"),
+                    "dte_at_close": payload.get("dte_at_close"),
+                    "option_type": payload.get("option_type"),
+                }
+            )
+        trades.sort(key=lambda trade: str(trade.get("closed_date") or ""))
+        return {
+            "symbol": normalized_symbol,
+            "trade_count": len(trades),
+            "trades": trades,
+            "caveat": "Trade stones are a visual memory aid, not a signal. Review sample size and linked records before drawing conclusions.",
+        }
+
     @app.get("/world/today", dependencies=[Depends(require_token)])
     def world_today() -> Dict[str, object]:
         today = datetime.now().astimezone().date().isoformat()

@@ -17,3 +17,7 @@ unity/obj/
 unity/UserSettings/
 unity/Builds/
 unity/Builds.meta
+*.blend1
+*.blend1.meta
+unity/Assets/Scenes/
+unity/Assets/Scenes.meta

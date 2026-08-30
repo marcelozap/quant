@@ -157,6 +157,22 @@ class GreenMachineApiTests(TestCase):
             self.assertEqual(payload["daily_review"]["payload"]["focus"], "NVDA")
             self.assertEqual(payload["song_memory"]["payload"]["title"], "Test Song")
 
+    def test_symbol_trade_path_returns_only_descriptive_fields(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            store = GreenMachineStore(directory, connection_factory=sqlite_development_connection)
+            store.initialize()
+            store.put("trade", {"underlying": "NVDA", "closed_date": "2026-02-10", "gain_loss": -12.5, "return_pct": -0.1, "dte_at_close": 2, "secret_note": "not exposed"})
+            store.put("trade", {"underlying": "SPY", "closed_date": "2026-02-10", "gain_loss": 5})
+            client = TestClient(create_app(_settings_for(directory), store, token="test-token"))
+
+            response = client.get("/journal/symbol/nvda/trades", headers={"X-Green-Machine-Token": "test-token"})
+            payload = response.json()
+
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(payload["trade_count"], 1)
+            self.assertEqual(payload["trades"][0]["gain_loss"], -12.5)
+            self.assertNotIn("secret_note", payload["trades"][0])
+
 
 def _settings_for(directory: str) -> Settings:
     return Settings(

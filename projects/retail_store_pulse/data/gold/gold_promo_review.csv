@@ -1,0 +1,13 @@
+store_id,item_id,category,promo_avg_units_per_hour,baseline_avg_units_per_hour,unit_lift_ratio,promo_avg_sales_per_hour,baseline_avg_sales_per_hour,promo_status
+1002,SKU003,dairy,4.40,2.86,1.54,16.99,12.26,strong
+1001,SKU003,dairy,4.79,3.36,1.43,18.50,14.41,strong
+1003,SKU003,dairy,4.38,3.06,1.43,16.89,13.14,strong
+1001,SKU011,frozen,2.14,1.51,1.42,13.46,10.52,strong
+1001,SKU009,beverages,2.70,1.92,1.41,13.34,10.52,strong
+1002,SKU001,produce,13.93,9.88,1.41,8.65,6.82,strong
+1003,SKU001,produce,14.69,10.42,1.41,9.12,7.19,strong
+1001,SKU001,produce,15.90,11.40,1.39,9.87,7.86,strong
+1002,SKU011,frozen,1.86,1.39,1.34,11.70,9.73,working
+1003,SKU009,beverages,2.21,1.68,1.31,10.91,9.24,working
+1003,SKU011,frozen,1.81,1.42,1.28,11.42,9.92,working
+1002,SKU009,beverages,2.19,1.78,1.23,10.81,9.75,working

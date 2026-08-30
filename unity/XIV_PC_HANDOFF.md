@@ -32,6 +32,12 @@ This file is the pickup point for continuing XIV on the home PC. Paste the
   means a negative `localScale` snuck in somewhere, not a billboard bug.
 - The scene is generated — never hand-edit or commit `XIVWorld.unity`.
 - The app pauses on focus loss and does not auto-resume; Esc resumes.
+- New Blender materials MUST keep a name substring that
+  `GreenMachineParkBuilder.RebindImportedMaterials` matches (Pine, Signal Lime,
+  Coral, Gold, Cream, Grass, Wood, Gate Stone, Arrival Brick, Patina Copper,
+  Parchment, Lantern) — anything else silently falls back to dark teal in Unity.
+- The Green Gate `EST. [YEAR]` hanging sign is a placeholder, to be populated
+  locally from the first trade's year later.
 
 ## CONTINUATION PROMPT
 
