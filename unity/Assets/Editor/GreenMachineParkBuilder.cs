@@ -377,30 +377,44 @@ namespace GreenMachine.Editor
             Color dark = new Color(0.025f, 0.018f, 0.015f);
             Color collar = new Color(0.92f, 0.25f, 0.28f);
 
-            CreateRoscoPart(PrimitiveType.Sphere, "Rosco Body", rosco.transform, new Vector3(0f, 0.9f, 0f), new Vector3(1.25f, 0.78f, 1.55f), fur, Quaternion.identity);
-            CreateRoscoPart(PrimitiveType.Sphere, "Rosco Head", rosco.transform, new Vector3(0f, 1.45f, 0.95f), new Vector3(0.92f, 0.86f, 0.9f), fur, Quaternion.identity);
+            GameObject body = CreateRoscoPart(PrimitiveType.Sphere, "Rosco Body", rosco.transform, new Vector3(0f, 0.9f, 0f), new Vector3(1.25f, 0.78f, 1.55f), fur, Quaternion.identity);
+            GameObject head = CreateRoscoPart(PrimitiveType.Sphere, "Rosco Head", rosco.transform, new Vector3(0f, 1.45f, 0.95f), new Vector3(0.92f, 0.86f, 0.9f), fur, Quaternion.identity);
             CreateRoscoPart(PrimitiveType.Sphere, "Rosco Muzzle", rosco.transform, new Vector3(0f, 1.25f, 1.62f), new Vector3(0.5f, 0.34f, 0.42f), lightFur, Quaternion.identity);
             CreateRoscoPart(PrimitiveType.Sphere, "Rosco Nose", rosco.transform, new Vector3(0f, 1.3f, 1.98f), new Vector3(0.18f, 0.14f, 0.14f), dark, Quaternion.identity);
 
-            CreateRoscoPart(PrimitiveType.Capsule, "Rosco Ear Left", rosco.transform, new Vector3(-0.48f, 1.9f, 0.82f), new Vector3(0.28f, 0.62f, 0.24f), fur, Quaternion.Euler(0f, 0f, -18f));
-            CreateRoscoPart(PrimitiveType.Capsule, "Rosco Ear Right", rosco.transform, new Vector3(0.48f, 1.9f, 0.82f), new Vector3(0.28f, 0.62f, 0.24f), fur, Quaternion.Euler(0f, 0f, 18f));
+            GameObject earLeft = CreateRoscoPart(PrimitiveType.Capsule, "Rosco Ear Left", rosco.transform, new Vector3(-0.48f, 1.9f, 0.82f), new Vector3(0.28f, 0.62f, 0.24f), fur, Quaternion.Euler(0f, 0f, -18f));
+            GameObject earRight = CreateRoscoPart(PrimitiveType.Capsule, "Rosco Ear Right", rosco.transform, new Vector3(0.48f, 1.9f, 0.82f), new Vector3(0.28f, 0.62f, 0.24f), fur, Quaternion.Euler(0f, 0f, 18f));
             CreateRoscoPart(PrimitiveType.Sphere, "Rosco Eye Left", rosco.transform, new Vector3(-0.31f, 1.62f, 1.68f), new Vector3(0.1f, 0.12f, 0.08f), dark, Quaternion.identity);
             CreateRoscoPart(PrimitiveType.Sphere, "Rosco Eye Right", rosco.transform, new Vector3(0.31f, 1.62f, 1.68f), new Vector3(0.1f, 0.12f, 0.08f), dark, Quaternion.identity);
 
-            CreateRoscoPart(PrimitiveType.Capsule, "Rosco Front Leg Left", rosco.transform, new Vector3(-0.43f, 0.38f, 0.62f), new Vector3(0.25f, 0.55f, 0.25f), lightFur, Quaternion.identity);
-            CreateRoscoPart(PrimitiveType.Capsule, "Rosco Front Leg Right", rosco.transform, new Vector3(0.43f, 0.38f, 0.62f), new Vector3(0.25f, 0.55f, 0.25f), lightFur, Quaternion.identity);
-            CreateRoscoPart(PrimitiveType.Capsule, "Rosco Back Leg Left", rosco.transform, new Vector3(-0.43f, 0.38f, -0.58f), new Vector3(0.28f, 0.6f, 0.28f), fur, Quaternion.identity);
-            CreateRoscoPart(PrimitiveType.Capsule, "Rosco Back Leg Right", rosco.transform, new Vector3(0.43f, 0.38f, -0.58f), new Vector3(0.28f, 0.6f, 0.28f), fur, Quaternion.identity);
-            CreateRoscoPart(PrimitiveType.Capsule, "Rosco Tail", rosco.transform, new Vector3(0f, 1.08f, -1.25f), new Vector3(0.2f, 0.72f, 0.2f), lightFur, Quaternion.Euler(-35f, 0f, 0f));
+            GameObject frontLegLeft = CreateRoscoPart(PrimitiveType.Capsule, "Rosco Front Leg Left", rosco.transform, new Vector3(-0.43f, 0.38f, 0.62f), new Vector3(0.25f, 0.55f, 0.25f), lightFur, Quaternion.identity);
+            GameObject frontLegRight = CreateRoscoPart(PrimitiveType.Capsule, "Rosco Front Leg Right", rosco.transform, new Vector3(0.43f, 0.38f, 0.62f), new Vector3(0.25f, 0.55f, 0.25f), lightFur, Quaternion.identity);
+            GameObject backLegLeft = CreateRoscoPart(PrimitiveType.Capsule, "Rosco Back Leg Left", rosco.transform, new Vector3(-0.43f, 0.38f, -0.58f), new Vector3(0.28f, 0.6f, 0.28f), fur, Quaternion.identity);
+            GameObject backLegRight = CreateRoscoPart(PrimitiveType.Capsule, "Rosco Back Leg Right", rosco.transform, new Vector3(0.43f, 0.38f, -0.58f), new Vector3(0.28f, 0.6f, 0.28f), fur, Quaternion.identity);
+            GameObject tail = CreateRoscoPart(PrimitiveType.Capsule, "Rosco Tail", rosco.transform, new Vector3(0f, 1.08f, -1.25f), new Vector3(0.2f, 0.72f, 0.2f), lightFur, Quaternion.Euler(-35f, 0f, 0f));
             CreateRoscoPart(PrimitiveType.Cylinder, "Rosco Collar", rosco.transform, new Vector3(0f, 1.62f, 0.92f), new Vector3(0.52f, 0.07f, 0.52f), collar, Quaternion.identity);
 
             RoscoCompanion companion = rosco.AddComponent<RoscoCompanion>();
             SerializedObject serialized = new SerializedObject(companion);
             serialized.FindProperty("player").objectReferenceValue = GameObject.Find("Marcelo").transform;
             serialized.ApplyModifiedPropertiesWithoutUndo();
+
+            RoscoProceduralAnimator animator = rosco.AddComponent<RoscoProceduralAnimator>();
+            SerializedObject animatorSerialized = new SerializedObject(animator);
+            animatorSerialized.FindProperty("companion").objectReferenceValue = companion;
+            animatorSerialized.FindProperty("body").objectReferenceValue = body.transform;
+            animatorSerialized.FindProperty("head").objectReferenceValue = head.transform;
+            animatorSerialized.FindProperty("earLeft").objectReferenceValue = earLeft.transform;
+            animatorSerialized.FindProperty("earRight").objectReferenceValue = earRight.transform;
+            animatorSerialized.FindProperty("frontLegLeft").objectReferenceValue = frontLegLeft.transform;
+            animatorSerialized.FindProperty("frontLegRight").objectReferenceValue = frontLegRight.transform;
+            animatorSerialized.FindProperty("backLegLeft").objectReferenceValue = backLegLeft.transform;
+            animatorSerialized.FindProperty("backLegRight").objectReferenceValue = backLegRight.transform;
+            animatorSerialized.FindProperty("tail").objectReferenceValue = tail.transform;
+            animatorSerialized.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        private static void CreateRoscoPart(
+        private static GameObject CreateRoscoPart(
             PrimitiveType type,
             string name,
             Transform parent,
@@ -417,6 +431,7 @@ namespace GreenMachine.Editor
             part.transform.localRotation = rotation;
             part.GetComponent<Renderer>().sharedMaterial = MaterialFor(color);
             Object.DestroyImmediate(part.GetComponent<Collider>());
+            return part;
         }
 
         private static void CreateWorldController()

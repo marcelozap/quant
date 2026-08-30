@@ -59,6 +59,7 @@ namespace GreenMachine.Editor
             Check(GameObject.Find("Marcelo")?.GetComponent<ThirdPersonMover>() != null, "Marcelo has ThirdPersonMover", ref passed, ref failed);
             Check(GameObject.Find("Main Camera")?.GetComponent<ThirdPersonCamera>() != null, "Main Camera has ThirdPersonCamera", ref passed, ref failed);
             Check(GameObject.Find("Rosco")?.GetComponent<RoscoCompanion>() != null, "Rosco has RoscoCompanion", ref passed, ref failed);
+            Check(GameObject.Find("Rosco")?.GetComponent<RoscoProceduralAnimator>() != null, "Rosco has expressive procedural animation", ref passed, ref failed);
             Check(GameObject.Find("Rosco")?.GetComponent<NavMeshAgent>() != null, "Rosco has a navigation agent", ref passed, ref failed);
             foreach (string landmark in RequiredLandmarks)
             {

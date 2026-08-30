@@ -53,6 +53,9 @@ namespace GreenMachine.Park
         public event System.Action<string> InterestDiscovered;
         public string CurrentState => state.ToString();
         public float CurrentSpeed => currentSpeed;
+        public bool IsInvestigating => state == CompanionState.Investigate;
+        public bool IsWaiting => state == CompanionState.Wait;
+        public bool IsCelebrating => celebrationTimer > 0f;
 
         private void Awake()
         {

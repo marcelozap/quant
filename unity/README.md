@@ -23,7 +23,7 @@ When the first route is ready to package, select **XIV -> Build Private macOS Ap
 /path/to/Unity -batchmode -quit -projectPath "/path/to/quant/unity" -executeMethod GreenMachine.Editor.XIVPrivateBuild.BuildPrivateMacAppBatch -logFile -
 ```
 
-The editor action creates the first exterior world shell, bakes a NavMesh for the park grounds, and adds a third-person player, a Rosco placeholder companion, lighting, and eight named landmarks. It does not store data or secrets in Unity.
+The editor action creates the first exterior world shell, bakes a NavMesh for the park grounds, and adds a third-person player, an expressive Rosco blockout, lighting, and eight named landmarks. Rosco's procedural bridge gives the placeholder a breathing idle, alternating walk cycle, curious investigation pose, tail wag, and small celebration response; the final skinned asset can keep the same companion contract. It does not store data or secrets in Unity.
 
 Use `WASD` or the arrow keys to walk, and hold `Shift` to run. Hold the right mouse button and drag to orbit the camera, or use `Q` and `E`. A left click on the ground sets a temporary walk destination. Press `F` to ask Rosco to wait or resume, and `R` to call him back. The first generated scene is a systems blockout, so the player and Rosco are intentionally placeholders while the route and behavior are being tested.
 
