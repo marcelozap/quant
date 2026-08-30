@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 namespace GreenMachine.Park
@@ -30,6 +31,7 @@ namespace GreenMachine.Park
         [SerializeField] private float interestSearchRadius = 10f;
         [SerializeField] private float interestCooldown = 7f;
         [SerializeField] private Animator animator;
+        [SerializeField] private NavMeshAgent navigationAgent;
 
         private CompanionState state = CompanionState.Greeting;
         private Vector3 investigationTarget;
@@ -63,6 +65,13 @@ namespace GreenMachine.Park
         private void Start()
         {
             if (animator == null) animator = GetComponentInChildren<Animator>();
+            if (navigationAgent == null) navigationAgent = GetComponent<NavMeshAgent>();
+            if (navigationAgent != null)
+            {
+                navigationAgent.updatePosition = false;
+                navigationAgent.updateRotation = false;
+                navigationAgent.stoppingDistance = stopDistance;
+            }
             CacheAnimatorParameters();
             interestPoints = FindObjectsByType<RoscoInterestPoint>(FindObjectsSortMode.None);
         }
@@ -133,6 +142,7 @@ namespace GreenMachine.Park
             transform.forward = player.forward;
             groundY = transform.position.y;
             previousPosition = transform.position;
+            if (navigationAgent != null && navigationAgent.isOnNavMesh) navigationAgent.Warp(transform.position);
             state = CompanionState.Follow;
             stateTimer = 0f;
         }
@@ -217,7 +227,16 @@ namespace GreenMachine.Park
 
         private void MoveToward(Vector3 target, float speed)
         {
-            Vector3 delta = target - transform.position;
+            Vector3 travelTarget = target;
+            if (navigationAgent != null && navigationAgent.isOnNavMesh)
+            {
+                navigationAgent.speed = speed;
+                navigationAgent.SetDestination(target);
+                if (navigationAgent.steeringTarget != Vector3.zero) travelTarget = navigationAgent.steeringTarget;
+                navigationAgent.nextPosition = transform.position;
+            }
+
+            Vector3 delta = travelTarget - transform.position;
             delta.y = 0f;
             if (delta.sqrMagnitude <= stopDistance * stopDistance)
             {
@@ -226,6 +245,7 @@ namespace GreenMachine.Park
             }
 
             transform.position += delta.normalized * speed * Time.deltaTime;
+            if (navigationAgent != null && navigationAgent.isOnNavMesh) navigationAgent.nextPosition = transform.position;
             Face(transform.position + delta);
         }
 

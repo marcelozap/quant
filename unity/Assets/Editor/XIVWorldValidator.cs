@@ -1,9 +1,11 @@
 using System.IO;
 using GreenMachine.Data;
 using GreenMachine.Park;
+using Unity.AI.Navigation;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 
 namespace GreenMachine.Editor
@@ -50,10 +52,14 @@ namespace GreenMachine.Editor
             int failed = 0;
 
             Check(scene.IsValid(), "XIVWorld scene is valid", ref passed, ref failed);
+            NavMeshSurface navigationSurface = GameObject.Find("Park Grounds")?.GetComponent<NavMeshSurface>();
+            Check(navigationSurface != null, "Park grounds have a NavMesh surface", ref passed, ref failed);
+            Check(navigationSurface != null && navigationSurface.navMeshData != null, "Park grounds have a baked NavMesh", ref passed, ref failed);
             Check(GameObject.Find("Marcelo")?.GetComponent<CharacterController>() != null, "Marcelo has a CharacterController", ref passed, ref failed);
             Check(GameObject.Find("Marcelo")?.GetComponent<ThirdPersonMover>() != null, "Marcelo has ThirdPersonMover", ref passed, ref failed);
             Check(GameObject.Find("Main Camera")?.GetComponent<ThirdPersonCamera>() != null, "Main Camera has ThirdPersonCamera", ref passed, ref failed);
             Check(GameObject.Find("Rosco")?.GetComponent<RoscoCompanion>() != null, "Rosco has RoscoCompanion", ref passed, ref failed);
+            Check(GameObject.Find("Rosco")?.GetComponent<NavMeshAgent>() != null, "Rosco has a navigation agent", ref passed, ref failed);
             foreach (string landmark in RequiredLandmarks)
             {
                 Check(GameObject.Find(landmark) != null, $"Landmark exists: {landmark}", ref passed, ref failed);

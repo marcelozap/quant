@@ -2,7 +2,9 @@ using GreenMachine.Data;
 using GreenMachine.Park;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 
 namespace GreenMachine.Editor
@@ -29,6 +31,9 @@ namespace GreenMachine.Editor
             ground.name = "Park Grounds";
             ground.transform.localScale = new Vector3(11f, 1f, 11f);
             ground.GetComponent<Renderer>().sharedMaterial = MaterialFor(new Color(0.12f, 0.28f, 0.24f));
+            NavMeshSurface navigationSurface = ground.AddComponent<NavMeshSurface>();
+            navigationSurface.collectObjects = CollectObjects.All;
+            navigationSurface.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
 
             foreach (var district in Districts) CreateDistrict(district.name, district.position, district.color);
             CreateWalkRoute();
@@ -40,6 +45,7 @@ namespace GreenMachine.Editor
             CreateGreenMachineBoard();
             CreateXivSystemsBoard();
             CreateFastTravel();
+            navigationSurface.BuildNavMesh();
             if (!AssetDatabase.IsValidFolder("Assets/Scenes")) AssetDatabase.CreateFolder("Assets", "Scenes");
             EditorSceneManager.SaveScene(scene, "Assets/Scenes/XIVWorld.unity");
             Selection.activeGameObject = GameObject.Find("Marcelo");
@@ -327,6 +333,14 @@ namespace GreenMachine.Editor
         {
             GameObject rosco = new GameObject("Rosco");
             rosco.transform.position = new Vector3(-2f, 0.18f, -8f);
+            NavMeshAgent navigationAgent = rosco.AddComponent<NavMeshAgent>();
+            navigationAgent.speed = 4.2f;
+            navigationAgent.acceleration = 16f;
+            navigationAgent.angularSpeed = 720f;
+            navigationAgent.radius = 0.55f;
+            navigationAgent.height = 2.2f;
+            navigationAgent.updatePosition = false;
+            navigationAgent.updateRotation = false;
 
             Color fur = new Color(0.56f, 0.27f, 0.12f);
             Color lightFur = new Color(0.82f, 0.58f, 0.34f);
