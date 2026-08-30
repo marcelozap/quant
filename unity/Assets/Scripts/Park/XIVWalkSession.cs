@@ -102,9 +102,9 @@ namespace GreenMachine.Park
             }
         }
 
-        public void CompleteWalk(string destinationName)
+        public bool CompleteWalk(string destinationName)
         {
-            if (record == null || IsComplete) return;
+            if (record == null || IsComplete) return false;
 
             string previousDestination = record.destinationName;
             string previousCompletion = record.completedAtUtc;
@@ -114,11 +114,12 @@ namespace GreenMachine.Park
             {
                 record.destinationName = previousDestination;
                 record.completedAtUtc = previousCompletion;
-                return;
+                return false;
             }
 
             AppendCompletedWalk();
             WalkCompleted?.Invoke(destinationName);
+            return true;
         }
 
         private void AppendCompletedWalk()

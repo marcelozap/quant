@@ -25,8 +25,9 @@ namespace GreenMachine.Park
         {
             if (completed || !other.CompareTag("Player") || session == null) return;
 
+            if (!session.CompleteWalk(destinationName)) return;
+
             completed = true;
-            session.CompleteWalk(destinationName);
             if (rosco != null) rosco.CelebrateReview();
         }
     }
