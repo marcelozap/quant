@@ -6,6 +6,8 @@ The current scene is an intentional blockout. It contains original placeholder g
 
 The full 12-month direction lives in [`XIV_WORLD_PLAN.md`](./XIV_WORLD_PLAN.md).
 
+The first runtime check is documented in [`XIV_HOME_PC_VALIDATION.md`](./XIV_HOME_PC_VALIDATION.md). It covers the generated scene, the Rosco walk, the local audio pass, pause behavior, saves, and the Green Gate art handoff.
+
 ## Open the first playable park
 
 1. Install Unity Hub and Unity `6000.0.41f1` with the build support for the machine you are testing on.
