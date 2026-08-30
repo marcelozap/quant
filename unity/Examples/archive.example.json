@@ -1,0 +1,22 @@
+{
+  "entries": [
+    {
+      "category": "SONG",
+      "title": "A song from today",
+      "note": "What it gave me.",
+      "date": "2026-08-29"
+    },
+    {
+      "category": "PROJECT",
+      "title": "XIV",
+      "note": "Build the world one walk at a time.",
+      "date": "2026-08-29"
+    },
+    {
+      "category": "MEMORY",
+      "title": "A place worth returning to",
+      "note": "A short private note.",
+      "date": "2026-08-29"
+    }
+  ]
+}

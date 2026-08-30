@@ -27,6 +27,12 @@ This is the first runtime gate for the private XIV world. Run it on the machine 
 2. Play the scene and confirm the track remains local, music energy changes lights and route motion, and the world still runs when the file is missing.
 3. For a MaloSound artifact, set `XIV_AUDIO_ANALYSIS_PATH` to an `AudioAnalysisV1` JSON file. Confirm timestamped `beat_times` produce beat pulses without inventing a grid when the artifact is invalid.
 
+## Archive pass
+
+1. Copy Examples/archive.example.json to the application's local XIV folder and rename it archive.json.
+2. Replace the sample entries with private songs, projects, or memories.
+3. Visit Archive Garden and confirm the board shows the entries, then remove the file once the empty-state behavior has also been checked.
+
 ## Safety pass
 
 - Press `Esc`; confirm time and audio pause, then resume cleanly.
