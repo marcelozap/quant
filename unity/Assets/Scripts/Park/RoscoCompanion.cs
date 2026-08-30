@@ -37,6 +37,7 @@ namespace GreenMachine.Park
         private RoscoInterestPoint[] interestPoints = System.Array.Empty<RoscoInterestPoint>();
         private readonly HashSet<RoscoInterestPoint> visitedPoints = new HashSet<RoscoInterestPoint>();
 
+        public event System.Action<string> InterestDiscovered;
         public string CurrentState => state.ToString();
 
         private void Awake()
@@ -140,6 +141,7 @@ namespace GreenMachine.Park
 
             if (closest == null) return;
             if (!closest.Repeatable) visitedPoints.Add(closest);
+            InterestDiscovered?.Invoke(closest.PointName);
             Investigate(closest.transform.position, closest.PauseSeconds);
         }
 

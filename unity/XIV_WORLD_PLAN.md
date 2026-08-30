@@ -88,6 +88,8 @@ These are destinations, not dashboard panels pasted into a game. The world shoul
 
 The current builder already creates the route blockout, Rosco interest points, and a local `XIVAudioAtmosphere` component. These are foundations for the gates below, not evidence that the final art or audio experience is complete.
 
+It also creates `XIVWalkSession`, which records only local walk duration, distance, Rosco discoveries, and peak atmosphere energy. This is the first save boundary for the world; it does not import or serialize Green Machine trade data.
+
 ### Month 5: the complete walk
 
 - Build the Green Gate to Archive Garden route as one authored experience.

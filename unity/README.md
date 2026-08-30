@@ -18,7 +18,7 @@ The editor action creates the first exterior world shell, a third-person player,
 
 The eight landmarks are a map of future XIV spaces, not a promise to build eight full districts immediately. The first production milestone is the Green Gate to Archive Garden walking route.
 
-The generated world also includes `XIVAudioAtmosphere`. Assign a local Unity `AudioClip` to its `AudioSource` or call `SetMusic` from a future media selector; the clip is analyzed locally and only its energy is sent to the world lighting. Audio files should stay outside Git.
+The generated world also includes `XIVAudioAtmosphere` and `XIVWalkSession`. Assign a local Unity `AudioClip` to its `AudioSource` or call `SetMusic` from a future media selector; the clip is analyzed locally and only its energy is sent to the world lighting. Walk summaries are autosaved to the Mac's application data directory. Audio files, session saves, and private data should stay outside Git.
 
 ## Local API
 

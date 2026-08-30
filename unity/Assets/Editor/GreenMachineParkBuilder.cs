@@ -35,6 +35,7 @@ namespace GreenMachine.Editor
             CreateRosco();
             CreateWorldController();
             CreateAudioAtmosphere();
+            CreateWalkSession();
             CreateFastTravel();
             EditorSceneManager.SaveScene(scene, "Assets/Scenes/XIVWorld.unity");
             Selection.activeGameObject = GameObject.Find("Marcelo");
@@ -173,6 +174,17 @@ namespace GreenMachine.Editor
             SerializedObject serialized = new SerializedObject(atmosphere);
             serialized.FindProperty("musicSource").objectReferenceValue = source;
             serialized.FindProperty("worldController").objectReferenceValue = Object.FindFirstObjectByType<ParkWorldController>();
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void CreateWalkSession()
+        {
+            GameObject session = new GameObject("XIV Walk Session");
+            XIVWalkSession walkSession = session.AddComponent<XIVWalkSession>();
+            SerializedObject serialized = new SerializedObject(walkSession);
+            serialized.FindProperty("player").objectReferenceValue = GameObject.Find("Marcelo").transform;
+            serialized.FindProperty("rosco").objectReferenceValue = GameObject.Find("Rosco").GetComponent<RoscoCompanion>();
+            serialized.FindProperty("atmosphere").objectReferenceValue = Object.FindFirstObjectByType<XIVAudioAtmosphere>();
             serialized.ApplyModifiedPropertiesWithoutUndo();
         }
 
