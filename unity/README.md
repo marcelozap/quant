@@ -17,6 +17,12 @@ The full 12-month direction lives in [`XIV_WORLD_PLAN.md`](./XIV_WORLD_PLAN.md).
 
 For a repeatable smoke test on a machine with the Unity editor installed, run Unity in batch mode with `-projectPath` set to this `unity/` folder and `-executeMethod GreenMachine.Editor.XIVWorldValidator.BuildAndValidateFirstWorldBatch`. The command generates the first scene, runs the structural validator, and exits with code `0` only when the checks pass. Use the Unity executable that belongs to version `6000.0.41f1` on that machine.
 
+When the first route is ready to package, select **XIV -> Build Private macOS App**. The build validates the scene first, registers only `Assets/Scenes/XIVWorld.unity` for startup, and writes the app to `Builds/XIV/XIV.app`. The batch equivalent is `GreenMachine.Editor.XIVPrivateBuild.BuildPrivateMacAppBatch`; it exits with code `0` only after a successful macOS build:
+
+```text
+/path/to/Unity -batchmode -quit -projectPath "/path/to/quant/unity" -executeMethod GreenMachine.Editor.XIVPrivateBuild.BuildPrivateMacAppBatch -logFile -
+```
+
 The editor action creates the first exterior world shell, a third-person player, a Rosco placeholder companion, lighting, and eight named landmarks. It does not store data or secrets in Unity.
 
 Use `WASD` or the arrow keys to walk, and hold `Shift` to run. Hold the right mouse button and drag to orbit the camera, or use `Q` and `E`. A left click on the ground sets a temporary walk destination. Press `F` to ask Rosco to wait or resume, and `R` to call him back. The first generated scene is a systems blockout, so the player and Rosco are intentionally placeholders while the route and behavior are being tested.
