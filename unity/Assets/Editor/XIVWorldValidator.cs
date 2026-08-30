@@ -13,6 +13,9 @@ namespace GreenMachine.Editor
     public static class XIVWorldValidator
     {
         private const string ScenePath = "Assets/Scenes/XIVWorld.unity";
+        private static string SceneFilePath => Path.Combine(
+            Directory.GetParent(Application.dataPath).FullName,
+            ScenePath.Replace('/', Path.DirectorySeparatorChar));
         private static readonly string[] RequiredLandmarks =
         {
             "Green Gate",
@@ -40,7 +43,7 @@ namespace GreenMachine.Editor
 
         public static bool ValidateFirstWorldScene()
         {
-            if (!File.Exists(ScenePath))
+            if (!File.Exists(SceneFilePath))
             {
                 Debug.LogError($"XIV validation failed: {ScenePath} does not exist. Run XIV/Create First Playable World first.");
                 return false;
@@ -97,7 +100,7 @@ namespace GreenMachine.Editor
             Check(GameObject.Find("Green Machine Read Only Board")?.GetComponent<GreenMachineBoard>() != null, "Green Machine board is read-only", ref passed, ref failed);
             Check(GameObject.Find("XIV Systems Board")?.GetComponent<XIVSystemsBoard>() != null, "XIV Systems board exists", ref passed, ref failed);
 
-            string sceneText = File.ReadAllText(ScenePath);
+            string sceneText = File.ReadAllText(SceneFilePath);
             Check(!sceneText.Contains("apiToken:"), "No serialized API token field exists", ref passed, ref failed);
             Check(!sceneText.Contains("GREEN_MACHINE_API_TOKEN"), "No environment token is serialized", ref passed, ref failed);
 

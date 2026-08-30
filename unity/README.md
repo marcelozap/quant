@@ -17,7 +17,7 @@ The full 12-month direction lives in [`XIV_WORLD_PLAN.md`](./XIV_WORLD_PLAN.md).
 
 For a repeatable smoke test on a machine with the Unity editor installed, run Unity in batch mode with `-projectPath` set to this `unity/` folder and `-executeMethod GreenMachine.Editor.XIVWorldValidator.BuildAndValidateFirstWorldBatch`. The command generates the first scene, runs the structural validator, and exits with code `0` only when the checks pass. Use the Unity executable that belongs to version `6000.0.41f1` on that machine.
 
-When the first route is ready to package, select **XIV -> Build Private macOS App**. The build validates the scene first, registers only `Assets/Scenes/XIVWorld.unity` for startup, stamps the app as `XIV` version `0.1.0`, and writes it to `Builds/XIV/XIV.app`. The batch equivalent is `GreenMachine.Editor.XIVPrivateBuild.BuildPrivateMacAppBatch`; it exits with code `0` only after a successful macOS build:
+When the first route is ready to package, select **XIV -> Build Private macOS App**. The build validates the scene first, registers only `Assets/Scenes/XIVWorld.unity` for startup, stamps the app as `XIV` version `0.1.0`, and writes it to `Builds/XIV/XIV.app`. The batch equivalent is `GreenMachine.Editor.XIVPrivateBuild.BuildPrivateMacAppBatch`; it resolves project and output paths from Unity's `Assets` directory, so it can be launched from any working directory, and exits with code `0` only after a successful macOS build:
 
 ```text
 /path/to/Unity -batchmode -quit -projectPath "/path/to/quant/unity" -executeMethod GreenMachine.Editor.XIVPrivateBuild.BuildPrivateMacAppBatch -logFile -
