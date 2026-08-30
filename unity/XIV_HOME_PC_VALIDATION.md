@@ -5,7 +5,7 @@ This is the first runtime gate for the private XIV world. Run it on the machine 
 ## Setup
 
 1. Pull `main` from `https://github.com/marcelozap/quant.git`.
-2. Open the repository's `unity/` folder in Unity `6000.0.41f1`.
+2. Open the repository's `unity/` folder in Unity `6000.0.82f1`.
 3. Wait for Package Manager to finish importing URP, Input System, AI Navigation, and Timeline.
 4. Select **XIV -> Create First Playable World**.
 5. Select **XIV -> Validate First Playable World**. Record any failed check before changing anything.
@@ -13,13 +13,14 @@ This is the first runtime gate for the private XIV world. Run it on the machine 
 ## First walk
 
 1. Open `Assets/Scenes/XIVWorld.unity` and press Play.
-2. Confirm the first view is Green Gate with the guide reading `ARCHIVE GARDEN -> WALK WITH ROSCO`.
-3. Walk with `WASD` or the arrow keys. Hold `Shift` to run. Hold the right mouse button and drag, or use `Q` and `E`, to orbit.
-4. Confirm Rosco greets Marcelo, follows at a comfortable distance, turns naturally, and investigates at least one route point.
-5. Press `F` to make Rosco wait and resume. Press `R` to recall him. Confirm neither action breaks the route.
-6. Walk to Archive Garden. Confirm Rosco celebrates, the guide changes to `WALK COMPLETE`, and the summary reports a saved walk.
-7. Quit and relaunch the scene. Confirm Archive Garden reports the previous total walk count.
-8. Quit during a different time of day and relaunch. Confirm the authored sky resumes near the saved hour.
+2. Confirm the Console reports `XIV runtime ready` with `camera=true`, `player=true`, `rosco=true`, `navmesh=true`, `route=true`, `destination=true`, and `save_root=true`.
+3. Confirm the first view is Green Gate with the guide reading `ARCHIVE GARDEN -> WALK WITH ROSCO`; the departure arch and first waystones should make the route readable even without the guide.
+4. Walk with `WASD` or the arrow keys. Hold `Shift` to run. Hold the right mouse button and drag, or use `J` and `L`, to orbit.
+5. Confirm Rosco greets Marcelo, follows at a comfortable distance, turns naturally, and investigates at least one route point. Near a route point, press `E` and confirm the prompt reveals a short authored observation.
+6. Press `F` to make Rosco wait and resume. Press `R` to recall him. Confirm neither action breaks the route.
+7. Walk to Archive Garden. Confirm Rosco celebrates, the guide changes to `WALK COMPLETE`, and the summary reports a saved walk with discoveries and moments.
+8. Quit and relaunch the scene. Confirm Archive Garden reports the previous total walk count.
+9. Quit during a different time of day and relaunch. Confirm the authored sky resumes near the saved hour.
 
 ## Audio pass
 

@@ -77,8 +77,8 @@ namespace GreenMachine.Park
 
             if (Keyboard.current != null)
             {
-                if (Keyboard.current.qKey.isPressed) yaw -= keyboardOrbitSpeed * Time.deltaTime;
-                if (Keyboard.current.eKey.isPressed) yaw += keyboardOrbitSpeed * Time.deltaTime;
+                if (Keyboard.current.jKey.isPressed) yaw -= keyboardOrbitSpeed * Time.deltaTime;
+                if (Keyboard.current.lKey.isPressed) yaw += keyboardOrbitSpeed * Time.deltaTime;
             }
 
             pitch = Mathf.Clamp(pitch, -10f, 55f);

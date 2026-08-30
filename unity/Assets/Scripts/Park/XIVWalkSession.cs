@@ -12,8 +12,10 @@ namespace GreenMachine.Park
         public float durationSeconds;
         public float distanceMeters;
         public int pointsDiscovered;
+        public int interactions;
         public float peakAudioEnergy;
         public string lastPointName;
+        public string lastInteractionName;
         public string destinationName;
         public string completedAtUtc;
     }
@@ -29,6 +31,7 @@ namespace GreenMachine.Park
         [SerializeField] private Transform player;
         [SerializeField] private RoscoCompanion rosco;
         [SerializeField] private XIVAudioAtmosphere atmosphere;
+        [SerializeField] private XIVInteractionController interactionController;
         [SerializeField] [Min(1f)] private float autosaveSeconds = 15f;
 
         private WalkSessionRecord record;
@@ -40,6 +43,7 @@ namespace GreenMachine.Park
         public WalkSessionRecord CurrentRecord => record;
         public bool IsComplete => record != null && !string.IsNullOrWhiteSpace(record.completedAtUtc);
         public int CompletedWalkCount => history.Count;
+        public WalkSessionRecord LastCompletedWalk => history.Count == 0 ? null : history[history.Count - 1];
 
         private void Awake()
         {
@@ -51,6 +55,8 @@ namespace GreenMachine.Park
             record = new WalkSessionRecord { startedAtUtc = DateTime.UtcNow.ToString("O") };
             if (player != null) previousPlayerPosition = player.position;
             if (rosco != null) rosco.InterestDiscovered += OnInterestDiscovered;
+            if (interactionController == null) interactionController = FindFirstObjectByType<XIVInteractionController>();
+            if (interactionController != null) interactionController.InteractionPerformed += OnInteractionPerformed;
         }
 
         private void Update()
@@ -190,6 +196,14 @@ namespace GreenMachine.Park
             record.lastPointName = pointName;
         }
 
+        private void OnInteractionPerformed(string interactionName)
+        {
+            if (record == null || IsComplete) return;
+            record.interactions++;
+            record.lastInteractionName = interactionName;
+            SaveNow();
+        }
+
         private void OnApplicationPause(bool paused)
         {
             if (paused) SaveNow();
@@ -203,6 +217,7 @@ namespace GreenMachine.Park
         private void OnDestroy()
         {
             if (rosco != null) rosco.InterestDiscovered -= OnInterestDiscovered;
+            if (interactionController != null) interactionController.InteractionPerformed -= OnInteractionPerformed;
         }
 
         private static string SaveDirectoryPath => Path.Combine(Application.persistentDataPath, "XIV");

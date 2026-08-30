@@ -63,6 +63,9 @@ namespace GreenMachine.Editor
             Check(RenderSettings.fog, "XIV has readable depth fog", ref passed, ref failed);
             Check(GameObject.Find("Marcelo")?.GetComponent<CharacterController>() != null, "Marcelo has a CharacterController", ref passed, ref failed);
             Check(GameObject.Find("Marcelo")?.GetComponent<ThirdPersonMover>() != null, "Marcelo has ThirdPersonMover", ref passed, ref failed);
+            Check(GameObject.Find("Marcelo")?.GetComponent<XIVInteractionController>() != null, "Marcelo has an interaction controller", ref passed, ref failed);
+            Check(GameObject.Find("Marcelo")?.GetComponent<MarceloProceduralAnimator>() != null, "Marcelo has an authored walk silhouette", ref passed, ref failed);
+            Check(GameObject.Find("Marcelo Head") != null && GameObject.Find("Marcelo Scarf") != null, "Marcelo silhouette has personal details", ref passed, ref failed);
             Check(GameObject.Find("Main Camera")?.GetComponent<ThirdPersonCamera>() != null, "Main Camera has ThirdPersonCamera", ref passed, ref failed);
             Check(GameObject.Find("Main Camera")?.GetComponent<ThirdPersonCamera>()?.FramesSecondaryTarget == true, "Camera frames Marcelo and Rosco", ref passed, ref failed);
             Check(GameObject.Find("Rosco")?.GetComponent<RoscoCompanion>() != null, "Rosco has RoscoCompanion", ref passed, ref failed);
@@ -76,7 +79,31 @@ namespace GreenMachine.Editor
             Check(GameObject.Find("Review Booth 1") != null, "Earnings Arcade has authored review booths", ref passed, ref failed);
             GameObject greenGate = GameObject.Find("Green Gate");
             Check(greenGate != null, "Green Gate exists", ref passed, ref failed);
-            Check(GameObject.Find("XIV Gate Sign")?.GetComponent<XIVBillboard>() != null, "Green Gate sign faces the camera", ref passed, ref failed);
+            bool hasAuthoredGateSign = GameObject.Find("XIV Gate Sign")?.GetComponent<XIVBillboard>() != null ||
+                GameObject.Find("Green Gate Imported Asset") != null;
+            Check(hasAuthoredGateSign, "Green Gate sign faces the camera", ref passed, ref failed);
+            GameObject importedGate = GameObject.Find("Green Gate Imported Asset");
+            if (importedGate != null)
+            {
+                Check(importedGate.GetComponentsInChildren<Light>(true).Length == 0,
+                    "Imported Green Gate is mesh-only", ref passed, ref failed);
+                Check(importedGate.GetComponentsInChildren<Camera>(true).Length == 0,
+                    "Imported Green Gate has no cameras", ref passed, ref failed);
+                bool importedMaterialsBound = true;
+                foreach (Renderer renderer in importedGate.GetComponentsInChildren<Renderer>(true))
+                {
+                    foreach (Material material in renderer.sharedMaterials)
+                    {
+                        if (material == null)
+                        {
+                            importedMaterialsBound = false;
+                            break;
+                        }
+                    }
+                    if (!importedMaterialsBound) break;
+                }
+                Check(importedMaterialsBound, "Imported Green Gate has no missing materials", ref passed, ref failed);
+            }
             GameObject archiveGarden = GameObject.Find("Archive Garden");
             Check(archiveGarden?.GetComponent<XIVWalkDestination>() != null, "Archive Garden completes the walk", ref passed, ref failed);
             SphereCollider destinationTrigger = archiveGarden?.GetComponent<SphereCollider>();
@@ -89,10 +116,25 @@ namespace GreenMachine.Editor
             GameObject route = GameObject.Find("Green Gate to Archive Garden Route");
             int routeDiscoveries = route == null ? 0 : route.GetComponentsInChildren<RoscoInterestPoint>(true).Length;
             Check(routeDiscoveries >= 3, "First route has at least three Rosco discoveries", ref passed, ref failed);
+            int routeInteractions = route == null ? 0 : route.GetComponentsInChildren<XIVInteractable>(true).Length;
+            Check(routeInteractions >= 3, "First route has at least three authored interactions", ref passed, ref failed);
             int routeMotionProps = route == null ? 0 : route.GetComponentsInChildren<XIVWindMotion>(true).Length;
             Check(routeMotionProps >= 3, "First route has audio-reactive motion props", ref passed, ref failed);
+            int routeWaystones = 0;
+            if (route != null)
+            {
+                foreach (Transform child in route.GetComponentsInChildren<Transform>(true))
+                {
+                    if (child.name.StartsWith("Route Waystone")) routeWaystones++;
+                }
+            }
+            Check(routeWaystones >= 12, "First route has a readable waystone trail", ref passed, ref failed);
+            Check(GameObject.Find("Green Gate Departure") != null && GameObject.Find("First Walk Threshold") != null,
+                "First route has arrival and progress thresholds", ref passed, ref failed);
+            Check(GameObject.Find("Archive Garden Pergola") != null && GameObject.Find("Archive Memory Bench") != null, "Archive Garden has a rest landmark", ref passed, ref failed);
             Check(GameObject.Find("XIV Audio Atmosphere")?.GetComponent<XIVAudioAtmosphere>() != null, "Audio atmosphere exists", ref passed, ref failed);
             Check(GameObject.Find("XIV Audio Atmosphere")?.GetComponent<AudioSource>() != null, "Audio source exists", ref passed, ref failed);
+            Check(GameObject.Find("XIV Runtime Diagnostics")?.GetComponent<XIVRuntimeDiagnostics>() != null, "Runtime diagnostics exist", ref passed, ref failed);
             Check(GameObject.Find("XIV Pause Controller")?.GetComponent<XIVPauseController>() != null, "Private pause controller exists", ref passed, ref failed);
             Check(GameObject.Find("XIV Walk Session")?.GetComponent<XIVWalkSession>() != null, "Walk session exists", ref passed, ref failed);
             Check(GameObject.Find("XIV Walk Guide")?.GetComponent<XIVWalkGuide>()?.IsConfigured == true, "First walk guide is configured", ref passed, ref failed);

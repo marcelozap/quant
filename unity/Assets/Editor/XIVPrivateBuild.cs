@@ -63,7 +63,7 @@ namespace GreenMachine.Editor
             PlayerSettings.productName = ProductName;
             PlayerSettings.companyName = CompanyName;
             PlayerSettings.bundleVersion = BundleVersion;
-            PlayerSettings.runInBackground = false;
+            PlayerSettings.runInBackground = true;
         }
     }
 }

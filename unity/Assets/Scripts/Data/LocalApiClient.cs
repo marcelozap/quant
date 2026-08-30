@@ -26,6 +26,16 @@ namespace GreenMachine.Data
             else onFailure?.Invoke(request.error);
         }
 
+        public IEnumerator GetSymbolTradePath(string symbol, System.Action<string> onSuccess, System.Action<string> onFailure)
+        {
+            string encodedSymbol = UnityWebRequest.EscapeURL(symbol.Trim().ToUpperInvariant());
+            using UnityWebRequest request = UnityWebRequest.Get($"{baseUrl}/journal/symbol/{encodedSymbol}/trades");
+            request.SetRequestHeader("X-Green-Machine-Token", EnvironmentToken());
+            yield return request.SendWebRequest();
+            if (request.result == UnityWebRequest.Result.Success) onSuccess?.Invoke(request.downloadHandler.text);
+            else onFailure?.Invoke(request.error);
+        }
+
         public void OpenSource(string url)
         {
             if (System.Uri.TryCreate(url, System.UriKind.Absolute, out System.Uri source)) Application.OpenURL(source.AbsoluteUri);

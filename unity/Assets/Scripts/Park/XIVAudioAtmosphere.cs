@@ -22,8 +22,8 @@ namespace GreenMachine.Park
         [SerializeField] [Min(0.1f)] private float energyScale = 8f;
         [SerializeField] private Color quietLightColor = new Color(0.35f, 0.55f, 0.72f);
         [SerializeField] private Color activeLightColor = new Color(1f, 0.52f, 0.22f);
-        [SerializeField] [Min(0f)] private float quietLightIntensity = 1.2f;
-        [SerializeField] [Min(0f)] private float activeLightIntensity = 4f;
+        [SerializeField] [Min(0f)] private float quietLightIntensity = 0.25f;
+        [SerializeField] [Min(0f)] private float activeLightIntensity = 0.9f;
         [SerializeField] [Range(0f, 300f)] private float beatBpm;
         [SerializeField] private float beatOffsetSeconds;
         [SerializeField] [Range(0.02f, 0.5f)] private float beatPulseWidth = 0.14f;
@@ -164,7 +164,11 @@ namespace GreenMachine.Park
 
         public bool LoadAnalysisJson(string json)
         {
-            if (string.IsNullOrWhiteSpace(json)) return false;
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                ClearBeatGrid();
+                return false;
+            }
 
             try
             {
@@ -260,7 +264,7 @@ namespace GreenMachine.Park
                 light.intensity = intensity;
             }
 
-            Color emission = color * Mathf.Lerp(0.2f, 1.6f, visualEnergy);
+            Color emission = color * Mathf.Lerp(0.15f, 1.1f, visualEnergy);
             foreach (Renderer renderer in reactiveRenderers)
             {
                 if (renderer == null || renderer.sharedMaterial == null || !renderer.sharedMaterial.HasProperty("_EmissionColor")) continue;

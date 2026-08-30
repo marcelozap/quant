@@ -25,7 +25,7 @@ namespace GreenMachine.Park
             Vector3 direction = targetCamera.transform.position - transform.position;
             if (lockVertical) direction.y = 0f;
             if (direction.sqrMagnitude <= 0.001f) return;
-            transform.rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
+            transform.rotation = Quaternion.LookRotation(-direction.normalized, Vector3.up);
         }
     }
 }

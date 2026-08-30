@@ -41,6 +41,7 @@ namespace GreenMachine.Park
         private float celebrationTimer;
         private float groundY;
         private float nextInterestCheck;
+        private float nextNavigationCheck;
         private float currentSpeed;
         private RoscoInterestPoint[] interestPoints = System.Array.Empty<RoscoInterestPoint>();
         private readonly HashSet<RoscoInterestPoint> visitedPoints = new HashSet<RoscoInterestPoint>();
@@ -49,6 +50,7 @@ namespace GreenMachine.Park
         private bool hasStateParameter;
         private bool hasInvestigatingParameter;
         private bool hasCelebrateParameter;
+        private bool navigationReady;
 
         public event System.Action<string> InterestDiscovered;
         public string CurrentState => state.ToString();
@@ -63,6 +65,8 @@ namespace GreenMachine.Park
             stateTimer = greetingDuration;
             groundY = transform.position.y;
             previousPosition = transform.position;
+            navigationAgent = GetComponent<NavMeshAgent>();
+            if (navigationAgent != null) navigationAgent.enabled = false;
         }
 
         private void Start()
@@ -74,6 +78,7 @@ namespace GreenMachine.Park
                 navigationAgent.updatePosition = false;
                 navigationAgent.updateRotation = false;
                 navigationAgent.stoppingDistance = stopDistance;
+                TryEnableNavigation();
             }
             CacheAnimatorParameters();
             interestPoints = FindObjectsByType<RoscoInterestPoint>(FindObjectsSortMode.None);
@@ -82,6 +87,12 @@ namespace GreenMachine.Park
         private void Update()
         {
             if (player == null) return;
+
+            if (!navigationReady && Time.time >= nextNavigationCheck)
+            {
+                nextNavigationCheck = Time.time + 1f;
+                TryEnableNavigation();
+            }
 
             ReadCompanionInput();
 
@@ -145,7 +156,7 @@ namespace GreenMachine.Park
             transform.forward = player.forward;
             groundY = transform.position.y;
             previousPosition = transform.position;
-            if (navigationAgent != null && navigationAgent.isOnNavMesh) navigationAgent.Warp(transform.position);
+            if (navigationReady && navigationAgent != null && navigationAgent.isOnNavMesh) navigationAgent.Warp(transform.position);
             state = CompanionState.Follow;
             stateTimer = 0f;
         }
@@ -231,7 +242,7 @@ namespace GreenMachine.Park
         private void MoveToward(Vector3 target, float speed)
         {
             Vector3 travelTarget = target;
-            if (navigationAgent != null && navigationAgent.isOnNavMesh)
+            if (navigationReady && navigationAgent != null && navigationAgent.isOnNavMesh)
             {
                 navigationAgent.speed = speed;
                 navigationAgent.SetDestination(target);
@@ -248,8 +259,20 @@ namespace GreenMachine.Park
             }
 
             transform.position += delta.normalized * speed * Time.deltaTime;
-            if (navigationAgent != null && navigationAgent.isOnNavMesh) navigationAgent.nextPosition = transform.position;
+            if (navigationReady && navigationAgent != null && navigationAgent.isOnNavMesh) navigationAgent.nextPosition = transform.position;
             Face(transform.position + delta);
+        }
+
+        private void TryEnableNavigation()
+        {
+            if (navigationAgent == null || navigationReady) return;
+            if (!NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 8f, NavMesh.AllAreas)) return;
+
+            transform.position = hit.position;
+            navigationAgent.enabled = true;
+            navigationAgent.Warp(hit.position);
+            navigationReady = navigationAgent.isOnNavMesh;
+            if (!navigationReady) navigationAgent.enabled = false;
         }
 
         private void Face(Vector3 point)

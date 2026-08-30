@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace GreenMachine.Park
 {
@@ -15,6 +16,22 @@ namespace GreenMachine.Park
         [SerializeField] private Transform player;
         [SerializeField] private RoscoCompanion rosco;
         [SerializeField] private List<Destination> destinations = new List<Destination>();
+        [SerializeField] private string whistleDestination = "Green Gate";
+
+        private void Update()
+        {
+            if (Keyboard.current != null && Keyboard.current.tKey.wasPressedThisFrame)
+            {
+                WhistleForRosco();
+            }
+        }
+
+        public void WhistleForRosco()
+        {
+            // Fast travel is a convenience gesture, not a reward tied to market outcomes.
+            if (rosco != null) rosco.Recall();
+            TravelTo(whistleDestination);
+        }
 
         public void TravelTo(string districtName)
         {

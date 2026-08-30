@@ -62,7 +62,7 @@ namespace GreenMachine.Park
 
         public void SetMarketEnergy(float normalizedEnergy)
         {
-            RenderSettings.ambientIntensity = Mathf.Lerp(0.55f, 1.25f, Mathf.Clamp01(normalizedEnergy));
+            RenderSettings.ambientIntensity = Mathf.Lerp(0.28f, 0.55f, Mathf.Clamp01(normalizedEnergy));
         }
 
         private void ApplyTimeOfDay()
@@ -85,11 +85,21 @@ namespace GreenMachine.Park
 
             RenderSettings.fogColor = Color.Lerp(night, sky, 0.62f);
             RenderSettings.fogDensity = Mathf.Lerp(0.018f, 0.006f, daylight);
+            RenderSettings.ambientLight = Color.Lerp(
+                new Color(0.035f, 0.05f, 0.09f),
+                new Color(0.16f, 0.22f, 0.23f),
+                daylight);
+            Camera worldCamera = Camera.main;
+            if (worldCamera != null)
+            {
+                worldCamera.clearFlags = CameraClearFlags.SolidColor;
+                worldCamera.backgroundColor = Color.Lerp(Color.black, sky, 0.24f);
+            }
             if (sun != null)
             {
                 sun.transform.rotation = Quaternion.Euler((parkHour - 6f) * 15f, -35f, 0f);
                 sun.color = Color.Lerp(Color.white, sky, 0.25f);
-                sun.intensity = Mathf.Lerp(0.18f, 1.15f, daylight);
+                sun.intensity = Mathf.Lerp(0.08f, 0.65f, daylight);
             }
         }
 
