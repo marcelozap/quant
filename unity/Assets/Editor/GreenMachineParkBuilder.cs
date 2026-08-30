@@ -232,7 +232,10 @@ namespace GreenMachine.Editor
             CreateTree(parent, "Archive Tree C", new Vector3(6.4f, 0f, 3.2f), 1.1f);
             CreateTree(parent, "Archive Tree D", new Vector3(6.6f, 0f, -3.6f), 0.9f);
             CreatePointLight(parent, "Archive Flower Light", new Vector3(0f, 0.7f, -4.5f), flower);
-            parent.gameObject.AddComponent<SphereCollider>();
+            SphereCollider destinationTrigger = parent.gameObject.AddComponent<SphereCollider>();
+            destinationTrigger.isTrigger = true;
+            destinationTrigger.radius = 5f;
+            destinationTrigger.center = Vector3.up * 1.5f;
             parent.gameObject.AddComponent<XIVWalkDestination>();
 
             GameObject sign = new GameObject("Archive Garden Sign");

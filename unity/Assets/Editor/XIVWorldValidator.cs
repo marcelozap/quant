@@ -31,7 +31,10 @@ namespace GreenMachine.Editor
             Check(GameObject.Find("Marcelo")?.GetComponent<ThirdPersonMover>() != null, "Marcelo has ThirdPersonMover", ref passed, ref failed);
             Check(GameObject.Find("Rosco")?.GetComponent<RoscoCompanion>() != null, "Rosco has RoscoCompanion", ref passed, ref failed);
             Check(GameObject.Find("Green Gate") != null, "Green Gate exists", ref passed, ref failed);
-            Check(GameObject.Find("Archive Garden")?.GetComponent<XIVWalkDestination>() != null, "Archive Garden completes the walk", ref passed, ref failed);
+            GameObject archiveGarden = GameObject.Find("Archive Garden");
+            Check(archiveGarden?.GetComponent<XIVWalkDestination>() != null, "Archive Garden completes the walk", ref passed, ref failed);
+            SphereCollider destinationTrigger = archiveGarden?.GetComponent<SphereCollider>();
+            Check(destinationTrigger != null && destinationTrigger.isTrigger, "Archive Garden has a trigger destination", ref passed, ref failed);
             Check(GameObject.Find("Green Gate to Archive Garden Route") != null, "First walking route exists", ref passed, ref failed);
             GameObject route = GameObject.Find("Green Gate to Archive Garden Route");
             int routeDiscoveries = route == null ? 0 : route.GetComponentsInChildren<RoscoInterestPoint>(true).Length;
