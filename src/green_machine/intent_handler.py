@@ -18,6 +18,32 @@ from typing import Dict, Any, Optional
 from datetime import datetime
 
 
+ALLOWED_ACTIONS = frozenset(
+    {
+        "run_daily_snapshot_review",
+        "evaluate_gates",
+    }
+)
+
+DANGEROUS_ACTIONS = frozenset(
+    {
+        "broker_order",
+        "place_order",
+        "submit_order",
+        "trade",
+        "live_trade_alert",
+        "copy_trade",
+        "git_push",
+        "deployment",
+        "deploy",
+        "payment",
+        "file_delete",
+        "delete_file",
+        "destructive_file_action",
+    }
+)
+
+
 class IntentHandler:
     """
     Process intents from the local intent queue.
@@ -111,11 +137,18 @@ class IntentHandler:
             if field not in intent:
                 return False
 
-        # Check forbidden actions
+        action = str(intent.get("requested_action", "")).strip()
+        if action not in ALLOWED_ACTIONS:
+            return False
+
+        action_tokens = {action}
+        action_tokens.update(part for part in action.replace("-", "_").split("_") if part)
+        if action in DANGEROUS_ACTIONS or action_tokens.intersection(DANGEROUS_ACTIONS):
+            return False
+
         forbidden = intent.get("forbidden_actions", [])
-        if "broker_order" in forbidden or "git_push" in forbidden:
-            # Intent explicitly forbids dangerous actions (good sign)
-            pass
+        if forbidden is not None and not isinstance(forbidden, list):
+            return False
 
         return True
 

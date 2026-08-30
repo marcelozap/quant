@@ -45,7 +45,11 @@ class ReceiptWriter:
     """
     Write signed JSONL receipts to local disk.
 
-    Canonical path: C:\Users\Green Machine\quant\unity\LocalState\receipts.jsonl
+    Canonical path (repo-relative): unity/LocalState/receipts.jsonl
+
+    Kept repo-relative on purpose: a Windows path in a non-raw docstring makes
+    "\\U" a unicode escape, which is a SyntaxError that stops the whole package
+    from importing.
     """
 
     def __init__(
@@ -145,10 +149,18 @@ class ReceiptWriter:
         """
         Append receipt to JSONL file (one JSON object per line).
 
+        A dry-run receipt is a PREVIEW and is never appended to the signed
+        ledger. Contract section 3: "A dry-run may create an in-memory receipt
+        preview, but it must not append to the signed ledger unless a future
+        explicit 'dry-run receipt persistence' mode is designed and approved."
+
         Returns:
-            True if written successfully, False otherwise.
+            True if written successfully, False otherwise (including refusal).
         """
         if self.receipts_path is None:
+            return False
+
+        if getattr(receipt, "mode", None) == "dry_run":
             return False
 
         try:

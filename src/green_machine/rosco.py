@@ -136,40 +136,96 @@ class RoscoResponder:
 
         return None
 
+    #: Word-boundary patterns for language Rosco must never use.
+    #:
+    #: These are regexes, not substrings. A previous version matched only long
+    #: phrases like "should buy", so "Buy SPY here.", "Target price is 500.",
+    #: "go long", "Hold your position." and "Short it." all passed as safe --
+    #: a check that returns True on every real violation is worse than none.
+    FORBIDDEN_PATTERNS = [
+        # direction
+        r"\bbuy(s|ing)?\b",
+        r"\bsell(s|ing)?\b",
+        r"\bshort(ing)?\s+(it|this|that|the\b)",
+        r"\bgo(ing)?\s+long\b",
+        r"\blong\s+position\b",
+        r"\bhold(ing)?\s+(your|the|this|that)\b",
+        r"\btake\s+(a\s+)?(position|profit)\b",
+        r"\bentry\b|\bexit\b",
+        # levels and sizing
+        r"\btarget\s+price\b|\bprice\s+target\b",
+        r"\bstop\s+loss\b",
+        r"\bposition\s+siz(e|ing)\b|\baccount\s+siz(e|ing)\b",
+        r"\ballocat(e|ion)\b",
+        # prediction and guarantee
+        r"\bguarantee(d|s)?\b",
+        r"\bwill\s+(profit|outperform|underperform|rally|drop|rise|fall)\b",
+        r"\bi\s+recommend\b|\bmy\s+advice\b|\byou\s+should\b|\byou\s+must\b",
+        r"\bstrong\s+(buy|sell)\b",
+        # market timing calls
+        r"\b(not|now)\s+(is|the)\s+(the\s+)?time\s+to\b",
+        r"\btime\s+to\s+(move|act|enter|exit|buy|sell)\b",
+    ]
+
+    #: Tickers are matched on the raw text, so case carries the signal.
+    TICKER_PATTERN = r"\b[A-Z]{2,5}\b"
+
+    #: All-caps words that are legitimate world vocabulary, not tickers.
+    TICKER_ALLOWLIST = frozenset({"UNKNOWN", "XIV", "OK", "A", "I"})
+
+    def find_violations(self) -> List[Dict[str, str]]:
+        """Return every line that breaks the no-advice rule.
+
+        Contract section 7: no ticker-specific advice; no buy, sell, hold,
+        target, account size, or live call language.
+        """
+        import re
+
+        violations: List[Dict[str, str]] = []
+        for line in self.lines:
+            raw = line.get("text", "")
+            lowered = raw.lower()
+
+            for pattern in self.FORBIDDEN_PATTERNS:
+                if re.search(pattern, lowered):
+                    violations.append(
+                        {
+                            "line_id": line.get("line_id", "?"),
+                            "pattern": pattern,
+                            "text": raw,
+                        }
+                    )
+                    break
+            else:
+                tickers = [
+                    t for t in re.findall(self.TICKER_PATTERN, raw)
+                    if t not in self.TICKER_ALLOWLIST
+                ]
+                if tickers:
+                    violations.append(
+                        {
+                            "line_id": line.get("line_id", "?"),
+                            "pattern": f"ticker:{tickers[0]}",
+                            "text": raw,
+                        }
+                    )
+
+        return violations
+
     def verify_no_advice(self) -> bool:
         """
         Verify all loaded lines contain no financial advice.
 
-        Forbidden words:
-        - buy, sell, short, long, trade
-        - outperform, underperform
-        - timing, call, target, price (as prediction)
-        - profits, returns (as guarantees)
-
         Returns:
-            True if all lines are safe; False if any line contains advice
+            True if every line is safe; False if any line contains advice.
         """
-        forbidden_patterns = [
-            "should buy",
-            "should sell",
-            "should trade",
-            "will outperform",
-            "will underperform",
-            "guaranteed",
-            "will profit",
-            "this is a great",
-            "you must",
-            "i recommend",
-        ]
-
-        for line in self.lines:
-            text = line.get("text", "").lower()
-            for pattern in forbidden_patterns:
-                if pattern in text:
-                    print(f"WARNING: Line {line.get('line_id')} contains '{pattern}'")
-                    return False
-
-        return True
+        violations = self.find_violations()
+        for violation in violations:
+            print(
+                f"WARNING: Rosco line {violation['line_id']} matches "
+                f"{violation['pattern']}: {violation['text']!r}"
+            )
+        return not violations
 
     def three_safe_routes(self) -> Dict[str, str]:
         """
