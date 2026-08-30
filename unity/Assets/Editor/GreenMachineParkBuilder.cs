@@ -412,6 +412,14 @@ namespace GreenMachine.Editor
             animatorSerialized.FindProperty("backLegRight").objectReferenceValue = backLegRight.transform;
             animatorSerialized.FindProperty("tail").objectReferenceValue = tail.transform;
             animatorSerialized.ApplyModifiedPropertiesWithoutUndo();
+
+            ThirdPersonCamera followCamera = Camera.main != null ? Camera.main.GetComponent<ThirdPersonCamera>() : null;
+            if (followCamera != null)
+            {
+                SerializedObject cameraSerialized = new SerializedObject(followCamera);
+                cameraSerialized.FindProperty("secondaryTarget").objectReferenceValue = rosco.transform;
+                cameraSerialized.ApplyModifiedPropertiesWithoutUndo();
+            }
         }
 
         private static GameObject CreateRoscoPart(
