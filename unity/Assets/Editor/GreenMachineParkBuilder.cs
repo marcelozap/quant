@@ -30,12 +30,62 @@ namespace GreenMachine.Editor
             ground.GetComponent<Renderer>().sharedMaterial = MaterialFor(new Color(0.12f, 0.28f, 0.24f));
 
             foreach (var district in Districts) CreateDistrict(district.name, district.position, district.color);
+            CreateWalkRoute();
             CreatePlayer();
             CreateRosco();
             CreateWorldController();
             CreateFastTravel();
             EditorSceneManager.SaveScene(scene, "Assets/Scenes/XIVWorld.unity");
             Selection.activeGameObject = GameObject.Find("Marcelo");
+        }
+
+        private static void CreateWalkRoute()
+        {
+            GameObject route = new GameObject("Green Gate to Archive Garden Route");
+            Vector3[] waypoints =
+            {
+                new Vector3(0f, 0f, -5f),
+                new Vector3(3f, 0f, -12f),
+                new Vector3(10f, 0f, -22f),
+                new Vector3(16f, 0f, -30f),
+                new Vector3(16f, 0f, -34f),
+            };
+
+            for (int i = 0; i < waypoints.Length - 1; i++)
+            {
+                CreatePathSegment(route.transform, waypoints[i], waypoints[i + 1]);
+            }
+
+            CreateInterestPoint(route.transform, "Wind chime", new Vector3(3f, 0.3f, -12f), new Color(1f, 0.7f, 0.28f));
+            CreateInterestPoint(route.transform, "Garden light", new Vector3(10f, 0.3f, -22f), new Color(0.36f, 0.86f, 0.72f));
+            CreateInterestPoint(route.transform, "Archive marker", new Vector3(16f, 0.3f, -30f), new Color(0.95f, 0.56f, 0.76f));
+        }
+
+        private static void CreatePathSegment(Transform parent, Vector3 start, Vector3 end)
+        {
+            Vector3 direction = end - start;
+            direction.y = 0f;
+            GameObject segment = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            segment.name = "Route Path";
+            segment.transform.SetParent(parent);
+            segment.transform.position = (start + end) * 0.5f + Vector3.up * 0.04f;
+            segment.transform.localScale = new Vector3(3.2f, 0.08f, direction.magnitude);
+            segment.transform.rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
+            segment.GetComponent<Renderer>().sharedMaterial = MaterialFor(new Color(0.78f, 0.69f, 0.48f));
+        }
+
+        private static void CreateInterestPoint(Transform parent, string name, Vector3 position, Color color)
+        {
+            GameObject point = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            point.name = name;
+            point.transform.SetParent(parent);
+            point.transform.position = position;
+            point.transform.localScale = Vector3.one * 0.55f;
+            point.GetComponent<Renderer>().sharedMaterial = MaterialFor(color);
+            RoscoInterestPoint interest = point.AddComponent<RoscoInterestPoint>();
+            SerializedObject serialized = new SerializedObject(interest);
+            serialized.FindProperty("pointName").stringValue = name;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private static void CreateDistrict(string districtName, Vector3 position, Color color)

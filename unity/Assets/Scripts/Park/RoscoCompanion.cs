@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GreenMachine.Park
@@ -22,6 +23,9 @@ namespace GreenMachine.Park
         [SerializeField] private float investigationRadius = 0.4f;
         [SerializeField] private float idleBobHeight = 0.035f;
         [SerializeField] private float idleBobSpeed = 2.4f;
+        [SerializeField] private bool inspectNearbyPoints = true;
+        [SerializeField] private float interestSearchRadius = 10f;
+        [SerializeField] private float interestCooldown = 7f;
 
         private CompanionState state = CompanionState.Greeting;
         private Vector3 investigationTarget;
@@ -29,6 +33,9 @@ namespace GreenMachine.Park
         private float stateTimer;
         private float celebrationTimer;
         private float groundY;
+        private float nextInterestCheck;
+        private RoscoInterestPoint[] interestPoints = System.Array.Empty<RoscoInterestPoint>();
+        private readonly HashSet<RoscoInterestPoint> visitedPoints = new HashSet<RoscoInterestPoint>();
 
         public string CurrentState => state.ToString();
 
@@ -37,6 +44,11 @@ namespace GreenMachine.Park
             baseScale = transform.localScale;
             stateTimer = greetingDuration;
             groundY = transform.position.y;
+        }
+
+        private void Start()
+        {
+            interestPoints = FindObjectsByType<RoscoInterestPoint>(FindObjectsSortMode.None);
         }
 
         private void Update()
@@ -55,6 +67,7 @@ namespace GreenMachine.Park
                     break;
                 case CompanionState.Follow:
                     MoveToward(FollowTarget(), followSpeed);
+                    CheckForNearbyInterest();
                     break;
                 case CompanionState.Wait:
                     Face(player.position);
@@ -103,6 +116,31 @@ namespace GreenMachine.Park
         public void CelebrateReview()
         {
             celebrationTimer = 0.65f;
+        }
+
+        private void CheckForNearbyInterest()
+        {
+            if (!inspectNearbyPoints || Time.time < nextInterestCheck) return;
+            nextInterestCheck = Time.time + interestCooldown;
+
+            RoscoInterestPoint closest = null;
+            float closestDistance = interestSearchRadius;
+            foreach (RoscoInterestPoint point in interestPoints)
+            {
+                if (point == null || !point.isActiveAndEnabled) continue;
+                if (!point.Repeatable && visitedPoints.Contains(point)) continue;
+
+                float distance = FlatDistance(transform.position, point.transform.position);
+                if (distance <= closestDistance)
+                {
+                    closest = point;
+                    closestDistance = distance;
+                }
+            }
+
+            if (closest == null) return;
+            if (!closest.Repeatable) visitedPoints.Add(closest);
+            Investigate(closest.transform.position, closest.PauseSeconds);
         }
 
         private Vector3 FollowTarget()
