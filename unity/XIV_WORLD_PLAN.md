@@ -101,6 +101,7 @@ The generated Semiconductor Speedway also contains an XIV Systems board. It prov
 - Add points of interest that Rosco can notice.
 - Add simple interactable objects, a return-home state, and a walk-session record.
 - Add a quiet end-of-walk moment so the experience has a beginning, middle, and end.
+- Complete the first route when the player reaches Archive Garden, save the destination, and give Rosco a small celebration response.
 
 **Gate:** the first fifteen minutes work from a clean launch and can be repeated without feeling like a test scene.
 

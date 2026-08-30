@@ -13,6 +13,8 @@ namespace GreenMachine.Park
         public int pointsDiscovered;
         public float peakAudioEnergy;
         public string lastPointName;
+        public string destinationName;
+        public string completedAtUtc;
     }
 
     public sealed class XIVWalkSession : MonoBehaviour
@@ -27,6 +29,7 @@ namespace GreenMachine.Park
         private float autosaveTimer;
 
         public WalkSessionRecord CurrentRecord => record;
+        public bool IsComplete => record != null && !string.IsNullOrWhiteSpace(record.completedAtUtc);
 
         private void Start()
         {
@@ -66,6 +69,15 @@ namespace GreenMachine.Park
             Directory.CreateDirectory(directory);
             string path = Path.Combine(directory, "walk-session.json");
             File.WriteAllText(path, JsonUtility.ToJson(record, true));
+        }
+
+        public void CompleteWalk(string destinationName)
+        {
+            if (record == null || IsComplete) return;
+
+            record.destinationName = destinationName;
+            record.completedAtUtc = DateTime.UtcNow.ToString("O");
+            SaveNow();
         }
 
         private void OnInterestDiscovered(string pointName)
