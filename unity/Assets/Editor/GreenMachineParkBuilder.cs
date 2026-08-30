@@ -94,7 +94,8 @@ namespace GreenMachine.Editor
             tree.transform.localPosition = position;
             tree.transform.localScale = Vector3.one * scale;
             CreatePart(PrimitiveType.Cylinder, "Tree Trunk", tree.transform, new Vector3(0f, 1.1f, 0f), new Vector3(0.32f, 1.1f, 0.32f), new Color(0.28f, 0.12f, 0.06f));
-            CreatePart(PrimitiveType.Sphere, "Tree Canopy", tree.transform, new Vector3(0f, 2.7f, 0f), new Vector3(1.35f, 1.7f, 1.35f), new Color(0.12f, 0.42f, 0.27f));
+            GameObject canopy = CreatePart(PrimitiveType.Sphere, "Tree Canopy", tree.transform, new Vector3(0f, 2.7f, 0f), new Vector3(1.35f, 1.7f, 1.35f), new Color(0.12f, 0.42f, 0.27f));
+            AddWindMotion(canopy, position.x * 0.13f + position.z * 0.07f);
         }
 
         private static void CreateRouteLantern(Transform parent, string name, Vector3 position)
@@ -103,7 +104,8 @@ namespace GreenMachine.Editor
             lantern.transform.SetParent(parent);
             lantern.transform.localPosition = position;
             CreatePart(PrimitiveType.Cylinder, "Lantern Post", lantern.transform, new Vector3(0f, 1.2f, 0f), new Vector3(0.12f, 1.2f, 0.12f), new Color(0.08f, 0.1f, 0.13f));
-            CreatePart(PrimitiveType.Sphere, "Lantern", lantern.transform, new Vector3(0f, 2.45f, 0f), new Vector3(0.3f, 0.42f, 0.3f), new Color(1f, 0.66f, 0.24f));
+            GameObject lamp = CreatePart(PrimitiveType.Sphere, "Lantern", lantern.transform, new Vector3(0f, 2.45f, 0f), new Vector3(0.3f, 0.42f, 0.3f), new Color(1f, 0.66f, 0.24f));
+            AddWindMotion(lamp, position.x * 0.1f + position.z * 0.05f);
             CreatePointLight(lantern.transform, "Route Glow", new Vector3(0f, 2.45f, 0f), new Color(1f, 0.48f, 0.2f));
         }
 
@@ -241,7 +243,8 @@ namespace GreenMachine.Editor
 
             CreatePart(PrimitiveType.Cylinder, "Archive Garden Plinth", parent, new Vector3(0f, 0.28f, 0f), new Vector3(5.2f, 0.28f, 5.2f), ground);
             CreatePart(PrimitiveType.Cylinder, "Archive Memory Marker", parent, new Vector3(0f, 1.25f, 0f), new Vector3(0.65f, 1.25f, 0.65f), memory);
-            CreatePart(PrimitiveType.Sphere, "Archive Memory Glow", parent, new Vector3(0f, 3.1f, 0f), new Vector3(0.9f, 0.9f, 0.9f), accentColor);
+            GameObject memoryGlow = CreatePart(PrimitiveType.Sphere, "Archive Memory Glow", parent, new Vector3(0f, 3.1f, 0f), new Vector3(0.9f, 0.9f, 0.9f), accentColor);
+            AddWindMotion(memoryGlow, 1.4f);
             CreatePointLight(parent, "Archive Garden Glow", new Vector3(0f, 2.7f, 0f), accentColor);
 
             Vector3[] memoryStones =
@@ -313,6 +316,14 @@ namespace GreenMachine.Editor
             part.transform.localScale = localScale;
             part.GetComponent<Renderer>().sharedMaterial = MaterialFor(color);
             return part;
+        }
+
+        private static void AddWindMotion(GameObject target, float phaseOffset)
+        {
+            XIVWindMotion motion = target.AddComponent<XIVWindMotion>();
+            SerializedObject serialized = new SerializedObject(motion);
+            serialized.FindProperty("phaseOffset").floatValue = phaseOffset;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private static void CreatePointLight(Transform parent, string name, Vector3 localPosition, Color color)
