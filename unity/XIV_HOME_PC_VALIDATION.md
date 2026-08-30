@@ -19,6 +19,7 @@ This is the first runtime gate for the private XIV world. Run it on the machine 
 5. Press `F` to make Rosco wait and resume. Press `R` to recall him. Confirm neither action breaks the route.
 6. Walk to Archive Garden. Confirm Rosco celebrates, the guide changes to `WALK COMPLETE`, and the summary reports a saved walk.
 7. Quit and relaunch the scene. Confirm Archive Garden reports the previous total walk count.
+8. Quit during a different time of day and relaunch. Confirm the authored sky resumes near the saved hour.
 
 ## Audio pass
 
@@ -33,6 +34,7 @@ This is the first runtime gate for the private XIV world. Run it on the machine 
 - Walk Marcelo beyond the test ground if practical; confirm he returns to Green Gate with movement cleared instead of requiring a restart.
 - Complete a walk with the save directory writable, then temporarily make it unavailable and confirm the destination remains retryable rather than claiming an unsaved completion.
 - After a completed walk, force-quit once and relaunch; confirm the active session and walk history remain readable.
+- Confirm the local atmosphere save contains only the XIV time-of-day state and does not contain API tokens or market records.
 - Confirm no API token, trade history, or private source data appears in the Unity scene or project assets.
 
 ## Evidence to bring back
