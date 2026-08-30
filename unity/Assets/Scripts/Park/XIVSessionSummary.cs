@@ -11,7 +11,9 @@ namespace GreenMachine.Park
         {
             if (session == null) session = FindFirstObjectByType<XIVWalkSession>();
             if (session != null) session.WalkCompleted += OnWalkCompleted;
-            SetText("ARCHIVE GARDEN\nWALK SAVES HERE");
+            SetText(session == null
+                ? "ARCHIVE GARDEN\nWALK SAVES HERE"
+                : $"ARCHIVE GARDEN\nWALK SAVES HERE\nTOTAL WALKS {session.CompletedWalkCount}");
         }
 
         private void OnWalkCompleted(string destinationName)
@@ -20,7 +22,8 @@ namespace GreenMachine.Park
             string destination = string.IsNullOrWhiteSpace(destinationName) ? "DESTINATION" : destinationName.ToUpperInvariant();
             SetText(
                 $"{destination}\nWALK SAVED\n" +
-                $"{record.distanceMeters:0.0} M  /  {record.pointsDiscovered} DISCOVERIES");
+                $"{record.distanceMeters:0.0} M  /  {record.pointsDiscovered} DISCOVERIES\n" +
+                $"TOTAL WALKS {session.CompletedWalkCount}");
         }
 
         private void SetText(string value)
