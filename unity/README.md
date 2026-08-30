@@ -19,7 +19,7 @@ For a repeatable smoke test on a machine with the Unity editor installed, run Un
 
 The editor action creates the first exterior world shell, a third-person player, a Rosco placeholder companion, lighting, and eight named landmarks. It does not store data or secrets in Unity.
 
-Use `WASD` or the arrow keys to walk, and hold `Shift` to run. Hold the right mouse button and drag to orbit the camera, or use `Q` and `E`. A left click on the ground sets a temporary walk destination. The first generated scene is a systems blockout, so the player and Rosco are intentionally placeholders while the route and behavior are being tested.
+Use `WASD` or the arrow keys to walk, and hold `Shift` to run. Hold the right mouse button and drag to orbit the camera, or use `Q` and `E`. A left click on the ground sets a temporary walk destination. Press `F` to ask Rosco to wait or resume, and `R` to call him back. The first generated scene is a systems blockout, so the player and Rosco are intentionally placeholders while the route and behavior are being tested.
 
 The eight landmarks are a map of future XIV spaces, not a promise to build eight full districts immediately. The first production milestone is the Green Gate to Archive Garden walking route.
 

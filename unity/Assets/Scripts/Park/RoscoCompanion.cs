@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace GreenMachine.Park
 {
@@ -69,6 +70,8 @@ namespace GreenMachine.Park
         private void Update()
         {
             if (player == null) return;
+
+            ReadCompanionInput();
 
             if (state != CompanionState.Investigate || FlatDistance(transform.position, investigationTarget) <= investigationRadius)
             {
@@ -145,6 +148,22 @@ namespace GreenMachine.Park
         public void CelebrateReview()
         {
             celebrationTimer = 0.65f;
+        }
+
+        private void ReadCompanionInput()
+        {
+            if (Keyboard.current == null) return;
+            if (Keyboard.current.rKey.wasPressedThisFrame)
+            {
+                Recall();
+                return;
+            }
+
+            if (Keyboard.current.fKey.wasPressedThisFrame)
+            {
+                if (state == CompanionState.Wait) Recall();
+                else WaitWithPlayer();
+            }
         }
 
         private void CheckForNearbyInterest()
