@@ -76,6 +76,7 @@ namespace GreenMachine.Park
 
             string audioPath = Environment.GetEnvironmentVariable("XIV_AUDIO_PATH");
             if (!string.IsNullOrWhiteSpace(audioPath)) LoadMusicFile(audioPath);
+            else TryLoadLocalAudio();
         }
 
         public void SetMusic(AudioClip clip)
@@ -100,6 +101,32 @@ namespace GreenMachine.Park
         public void LoadMusicFile(string path)
         {
             if (!string.IsNullOrWhiteSpace(path)) StartCoroutine(LoadMusicFileRoutine(path));
+        }
+
+        private void TryLoadLocalAudio()
+        {
+            string audioDirectory = Path.Combine(Application.persistentDataPath, "XIV", "Audio");
+            if (!Directory.Exists(audioDirectory)) return;
+
+            try
+            {
+                string[] files = Directory.GetFiles(audioDirectory);
+                Array.Sort(files, StringComparer.OrdinalIgnoreCase);
+                foreach (string file in files)
+                {
+                    if (!IsSupportedAudioPath(file)) continue;
+                    LoadMusicFile(file);
+                    return;
+                }
+            }
+            catch (IOException)
+            {
+                // The world still runs with the fallback atmosphere when the local folder is unavailable.
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // The world still runs with the fallback atmosphere when the local folder is unavailable.
+            }
         }
 
         public void SetBeatGrid(float bpm, float offsetSeconds = 0f)
@@ -203,6 +230,12 @@ namespace GreenMachine.Park
                 ".ogg" => AudioType.OGGVORBIS,
                 _ => AudioType.MPEG,
             };
+        }
+
+        private static bool IsSupportedAudioPath(string path)
+        {
+            string extension = Path.GetExtension(path).ToLowerInvariant();
+            return extension == ".mp3" || extension == ".wav" || extension == ".ogg";
         }
 
         private void ApplyLightResponse()
