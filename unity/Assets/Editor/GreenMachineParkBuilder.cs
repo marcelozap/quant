@@ -12,6 +12,7 @@ namespace GreenMachine.Editor
 {
     public static class GreenMachineParkBuilder
     {
+        private const string GreenGateExportPath = "Assets/Art/Exports/GreenGate.fbx";
         private const string SkyMaterialPath = "Assets/Art/Generated/XIVProceduralSky.mat";
         private static readonly (string name, Vector3 position, Color color)[] Districts =
         {
@@ -247,6 +248,8 @@ namespace GreenMachine.Editor
 
         private static void CreateGreenGate(Transform parent, Color accentColor)
         {
+            if (TryCreateImportedGreenGate(parent, accentColor)) return;
+
             Color stone = new Color(0.07f, 0.24f, 0.25f);
             Color trim = new Color(0.93f, 0.77f, 0.35f);
             Color coral = new Color(0.92f, 0.35f, 0.34f);
@@ -277,6 +280,30 @@ namespace GreenMachine.Editor
             CreatePointLight(parent, "Left Gate Glow", new Vector3(-4.2f, 4.3f, -1.8f), accentColor);
             CreatePointLight(parent, "Right Gate Glow", new Vector3(4.2f, 4.3f, -1.8f), coral);
 
+            CreateGreenGateSign(parent);
+        }
+
+        private static bool TryCreateImportedGreenGate(Transform parent, Color accentColor)
+        {
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(GreenGateExportPath);
+            if (prefab == null) return false;
+
+            GameObject imported = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
+            if (imported == null) return false;
+
+            imported.name = "Green Gate Imported Asset";
+            imported.transform.SetParent(parent, false);
+            imported.transform.localPosition = Vector3.zero;
+            imported.transform.localRotation = Quaternion.identity;
+            imported.transform.localScale = Vector3.one;
+            CreatePointLight(parent, "Left Gate Glow", new Vector3(-4.2f, 4.3f, -1.8f), accentColor);
+            CreatePointLight(parent, "Right Gate Glow", new Vector3(4.2f, 4.3f, -1.8f), new Color(0.92f, 0.35f, 0.34f));
+            CreateGreenGateSign(parent);
+            return true;
+        }
+
+        private static void CreateGreenGateSign(Transform parent)
+        {
             GameObject sign = new GameObject("XIV Gate Sign");
             sign.transform.SetParent(parent);
             sign.transform.localPosition = new Vector3(0f, 6.35f, -0.78f);

@@ -114,18 +114,14 @@ def build_gate():
     cube("Gate Trim", (0, -0.72, 5.1), (4.35, 0.08, 0.12), GOLD, 0.04)
     cube("Left Arch Support", (-2.6, 0, 2.05), (0.55, 0.62, 2.0), CORAL, 0.12)
     cube("Right Arch Support", (2.6, 0, 2.05), (0.55, 0.62, 2.0), CORAL, 0.12)
-    text("GREEN", (0, -0.78, 4.85), 0.72, LIME)
-    text("MACHINE", (0, -0.79, 4.12), 0.73, CREAM)
-    text("PARK", (0, -0.8, 3.55), 0.34, GOLD)
+    text("XIV", (0, -0.78, 4.55), 1.0, LIME)
+    text("GREEN GATE", (0, -0.79, 3.88), 0.48, CREAM)
 
     for x in (-9, -6.8, 6.8, 9):
         tree((x, 1.5, 0), 1.1 if abs(x) < 8 else 0.85)
     for x in (-7.2, -3.5, 3.5, 7.2):
         light_orb((x, -3.2, 1.3), (1.0, 0.58, 0.07) if x < 0 else (0.62, 0.95, 0.13))
 
-    sphere("Rosco Placeholder", (-2.1, -4.1, 0.8), (0.72, 0.48, 0.9), WOOD)
-    sphere("Rosco Ear Left", (-2.65, -4.35, 1.35), (0.24, 0.15, 0.38), WOOD)
-    sphere("Rosco Ear Right", (-1.55, -4.35, 1.35), (0.24, 0.15, 0.38), WOOD)
 
 
 def configure_render():
