@@ -15,3 +15,5 @@ unity/Logs/
 unity/Temp/
 unity/obj/
 unity/UserSettings/
+unity/Builds/
+unity/Builds.meta
