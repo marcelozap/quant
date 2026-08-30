@@ -133,7 +133,8 @@ namespace GreenMachine.Park
                 try
                 {
                     File.WriteAllText(temporaryPath, JsonUtility.ToJson(new WorldAtmosphereState { parkHour = parkHour }, true));
-                    File.Move(temporaryPath, path, true);
+                    if (File.Exists(path)) File.Replace(temporaryPath, path, null);
+                    else File.Move(temporaryPath, path);
                 }
                 finally
                 {
