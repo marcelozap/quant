@@ -95,6 +95,8 @@ The generated Earnings Arcade also contains a read-only Green Machine board. It 
 
 The generated Semiconductor Speedway also contains an XIV Systems board. It provides a small local surface for the AI/business work inside XIV and names the three lanes consistently: XIV, MaloSound, and Green Machine.
 
+The editor also exposes **XIV -> Validate First Playable World**. It checks the generated scene, required player/Rosco/route/data objects, and the absence of serialized API-token fields before the first runtime test.
+
 ### Month 5: the complete walk
 
 - Build the Green Gate to Archive Garden route as one authored experience.

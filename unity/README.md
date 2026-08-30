@@ -12,7 +12,8 @@ The full 12-month direction lives in [`XIV_WORLD_PLAN.md`](./XIV_WORLD_PLAN.md).
 2. Open this `unity/` folder as a Unity project.
 3. Wait for Package Manager to install URP, Input System, AI Navigation, and Timeline.
 4. Select **XIV -> Create First Playable World** in the Unity editor menu.
-5. Open `Assets/Scenes/XIVWorld.unity` and press Play.
+5. Select **XIV -> Validate First Playable World** and resolve any failed checks.
+6. Open `Assets/Scenes/XIVWorld.unity` and press Play.
 
 The editor action creates the first exterior world shell, a third-person player, a Rosco placeholder companion, lighting, and eight named landmarks. It does not store data or secrets in Unity.
 
