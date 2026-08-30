@@ -15,6 +15,8 @@ The full 12-month direction lives in [`XIV_WORLD_PLAN.md`](./XIV_WORLD_PLAN.md).
 5. Select **XIV -> Validate First Playable World** and resolve any failed checks.
 6. Open `Assets/Scenes/XIVWorld.unity` and press Play.
 
+For a repeatable smoke test on a machine with the Unity editor installed, run Unity in batch mode with `-projectPath` set to this `unity/` folder and `-executeMethod GreenMachine.Editor.XIVWorldValidator.BuildAndValidateFirstWorldBatch`. The command generates the first scene, runs the structural validator, and exits with code `0` only when the checks pass. Use the Unity executable that belongs to version `6000.0.41f1` on that machine.
+
 The editor action creates the first exterior world shell, a third-person player, a Rosco placeholder companion, lighting, and eight named landmarks. It does not store data or secrets in Unity.
 
 Use `WASD` or the arrow keys to walk, and hold `Shift` to run. Hold the right mouse button and drag to orbit the camera, or use `Q` and `E`. A left click on the ground sets a temporary walk destination. The first generated scene is a systems blockout, so the player and Rosco are intentionally placeholders while the route and behavior are being tested.

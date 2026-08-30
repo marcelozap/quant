@@ -15,13 +15,25 @@ namespace GreenMachine.Editor
         [MenuItem("XIV/Validate First Playable World")]
         public static void ValidateFirstWorld()
         {
+            ValidateFirstWorldScene();
+        }
+
+        public static void BuildAndValidateFirstWorldBatch()
+        {
+            GreenMachineParkBuilder.CreatePark();
+            bool valid = ValidateFirstWorldScene();
+            EditorApplication.Exit(valid ? 0 : 1);
+        }
+
+        public static bool ValidateFirstWorldScene()
+        {
             if (!File.Exists(ScenePath))
             {
                 Debug.LogError($"XIV validation failed: {ScenePath} does not exist. Run XIV/Create First Playable World first.");
-                return;
+                return false;
             }
 
-            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return false;
             Scene scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
             int passed = 0;
             int failed = 0;
@@ -51,6 +63,7 @@ namespace GreenMachine.Editor
 
             if (failed == 0) Debug.Log($"XIV validation passed: {passed} checks in {ScenePath}.");
             else Debug.LogError($"XIV validation failed: {failed} checks failed and {passed} passed in {ScenePath}.");
+            return failed == 0;
         }
 
         private static void Check(bool condition, string message, ref int passed, ref int failed)
