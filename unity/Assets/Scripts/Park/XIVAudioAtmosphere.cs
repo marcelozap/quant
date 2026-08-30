@@ -35,6 +35,7 @@ namespace GreenMachine.Park
         private Light[] reactiveLights = System.Array.Empty<Light>();
         private Renderer[] reactiveRenderers = System.Array.Empty<Renderer>();
         private XIVWindMotion[] reactiveMotion = System.Array.Empty<XIVWindMotion>();
+        private float[] beatTimes = System.Array.Empty<float>();
 
         public float CurrentEnergy => currentEnergy;
         public float CurrentBeatPulse { get; private set; }
@@ -133,6 +134,7 @@ namespace GreenMachine.Park
         {
             beatBpm = Mathf.Clamp(bpm, 0f, 300f);
             beatOffsetSeconds = offsetSeconds;
+            beatTimes = System.Array.Empty<float>();
         }
 
         public bool LoadAnalysisFile(string path)
@@ -179,7 +181,9 @@ namespace GreenMachine.Park
                     previous = beatTime;
                 }
 
-                SetBeatGrid(document.bpm, document.beat_times[0]);
+                beatBpm = Mathf.Clamp(document.bpm, 0f, 300f);
+                beatOffsetSeconds = document.beat_times[0];
+                beatTimes = (float[])document.beat_times.Clone();
                 return true;
             }
             catch (ArgumentException)
@@ -193,6 +197,7 @@ namespace GreenMachine.Park
         {
             beatBpm = 0f;
             beatOffsetSeconds = 0f;
+            beatTimes = System.Array.Empty<float>();
             CurrentBeatPulse = 0f;
         }
 
@@ -271,12 +276,37 @@ namespace GreenMachine.Park
 
         private float ReadBeatPulse()
         {
-            if (musicSource == null || !musicSource.isPlaying || beatBpm <= 0f) return 0f;
+            if (musicSource == null || !musicSource.isPlaying) return 0f;
+
+            if (beatTimes.Length > 0)
+            {
+                float distanceFromBeat = Mathf.Abs(musicSource.time - beatTimes[ClosestBeatIndex(musicSource.time)]);
+                return Mathf.Clamp01(1f - distanceFromBeat / beatPulseWidth);
+            }
+
+            if (beatBpm <= 0f) return 0f;
 
             float beatsSinceOffset = (musicSource.time - beatOffsetSeconds) * beatBpm / 60f;
             float phase = Mathf.Repeat(beatsSinceOffset, 1f);
             float distanceFromBeat = Mathf.Min(phase, 1f - phase);
             return Mathf.Clamp01(1f - distanceFromBeat / beatPulseWidth);
+        }
+
+        private int ClosestBeatIndex(float time)
+        {
+            int low = 0;
+            int high = beatTimes.Length - 1;
+            while (low <= high)
+            {
+                int middle = low + (high - low) / 2;
+                if (beatTimes[middle] < time) low = middle + 1;
+                else if (beatTimes[middle] > time) high = middle - 1;
+                else return middle;
+            }
+
+            if (low >= beatTimes.Length) return beatTimes.Length - 1;
+            if (high < 0) return 0;
+            return time - beatTimes[high] <= beatTimes[low] - time ? high : low;
         }
     }
 }
