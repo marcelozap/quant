@@ -85,7 +85,7 @@ namespace GreenMachine.Park
                 string directory = SaveDirectoryPath;
                 Directory.CreateDirectory(directory);
                 string path = Path.Combine(directory, "walk-session.json");
-                File.WriteAllText(path, JsonUtility.ToJson(record, true));
+                WriteAtomically(path, JsonUtility.ToJson(record, true));
                 return true;
             }
             catch (IOException)
@@ -130,7 +130,7 @@ namespace GreenMachine.Park
             try
             {
                 Directory.CreateDirectory(SaveDirectoryPath);
-                File.WriteAllText(
+                WriteAtomically(
                     Path.Combine(SaveDirectoryPath, "walk-history.json"),
                     JsonUtility.ToJson(new WalkHistory { walks = history }, true));
             }
@@ -141,6 +141,20 @@ namespace GreenMachine.Park
             catch (UnauthorizedAccessException)
             {
                 // The current walk is still saved when history storage is unavailable.
+            }
+        }
+
+        private static void WriteAtomically(string path, string contents)
+        {
+            string temporaryPath = path + ".tmp";
+            try
+            {
+                File.WriteAllText(temporaryPath, contents);
+                File.Move(temporaryPath, path, true);
+            }
+            finally
+            {
+                if (File.Exists(temporaryPath)) File.Delete(temporaryPath);
             }
         }
 
