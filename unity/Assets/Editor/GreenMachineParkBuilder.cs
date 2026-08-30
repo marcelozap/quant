@@ -563,6 +563,8 @@ namespace GreenMachine.Editor
             serialized.FindProperty("display").objectReferenceValue = text;
             serialized.FindProperty("session").objectReferenceValue = GameObject.Find("XIV Walk Session").GetComponent<XIVWalkSession>();
             serialized.FindProperty("rosco").objectReferenceValue = GameObject.Find("Rosco").GetComponent<RoscoCompanion>();
+            serialized.FindProperty("player").objectReferenceValue = GameObject.Find("Marcelo").transform;
+            serialized.FindProperty("destination").objectReferenceValue = GameObject.Find("Archive Garden").transform;
             serialized.ApplyModifiedPropertiesWithoutUndo();
         }
 
