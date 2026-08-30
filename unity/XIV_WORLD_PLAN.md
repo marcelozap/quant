@@ -93,6 +93,8 @@ It also creates `XIVWalkSession`, which records only local walk duration, distan
 
 The generated Earnings Arcade also contains a read-only Green Machine board. It can show today's local review and song memory through `/world/today`, but it degrades to an explicit offline state and never places orders.
 
+The generated Semiconductor Speedway also contains an XIV Systems board. It provides a small local surface for the AI/business work inside XIV and names the three lanes consistently: XIV, MaloSound, and Green Machine.
+
 ### Month 5: the complete walk
 
 - Build the Green Gate to Archive Garden route as one authored experience.

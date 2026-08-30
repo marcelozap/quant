@@ -20,7 +20,7 @@ Use `WASD` or the arrow keys to walk. Hold the right mouse button and drag to or
 
 The eight landmarks are a map of future XIV spaces, not a promise to build eight full districts immediately. The first production milestone is the Green Gate to Archive Garden walking route.
 
-The generated world also includes `XIVAudioAtmosphere`, `XIVWalkSession`, and a Green Machine read-only board. Assign a local Unity `AudioClip` to its `AudioSource` or call `SetMusic` from a future media selector; the clip is analyzed locally and only its energy is sent to the world lighting. The board reads `/world/today` from the loopback API when available and displays an offline state otherwise. Walk summaries are autosaved to the Mac's application data directory. Audio files, session saves, tokens, and private data should stay outside Git.
+The generated world also includes `XIVAudioAtmosphere`, `XIVWalkSession`, a Green Machine read-only board, and an XIV Systems board. Assign a local Unity `AudioClip` to its `AudioSource` or call `SetMusic` from a future media selector; the clip is analyzed locally and only its energy is sent to the world lighting. The Green Machine board reads `/world/today` from the loopback API when available and displays an offline state otherwise. The XIV Systems board reads an optional local `XIV/systems.json` file and falls back to the three-lane identity. Walk summaries are autosaved to the Mac's application data directory. Audio files, session saves, tokens, and private data should stay outside Git.
 
 ## Local API
 

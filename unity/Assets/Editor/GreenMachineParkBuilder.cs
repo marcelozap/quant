@@ -1,3 +1,4 @@
+using GreenMachine.Data;
 using GreenMachine.Park;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -37,6 +38,7 @@ namespace GreenMachine.Editor
             CreateAudioAtmosphere();
             CreateWalkSession();
             CreateGreenMachineBoard();
+            CreateXivSystemsBoard();
             CreateFastTravel();
             if (!AssetDatabase.IsValidFolder("Assets/Scenes")) AssetDatabase.CreateFolder("Assets", "Scenes");
             EditorSceneManager.SaveScene(scene, "Assets/Scenes/XIVWorld.unity");
@@ -326,6 +328,35 @@ namespace GreenMachine.Editor
             GreenMachineBoard dataBoard = board.AddComponent<GreenMachineBoard>();
             SerializedObject serialized = new SerializedObject(dataBoard);
             serialized.FindProperty("apiClient").objectReferenceValue = client;
+            serialized.FindProperty("display").objectReferenceValue = text;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void CreateXivSystemsBoard()
+        {
+            GameObject district = GameObject.Find("Semiconductor Speedway");
+            if (district == null) return;
+
+            GameObject board = new GameObject("XIV Systems Board");
+            board.transform.SetParent(district.transform);
+            board.transform.localPosition = new Vector3(0f, 2.7f, -4.2f);
+
+            CreatePart(PrimitiveType.Cube, "Systems Board Frame", board.transform, Vector3.zero, new Vector3(5.2f, 3.2f, 0.3f), new Color(0.025f, 0.045f, 0.06f));
+            CreatePart(PrimitiveType.Cube, "Systems Board Screen", board.transform, new Vector3(0f, 0f, -0.18f), new Vector3(4.7f, 2.7f, 0.08f), new Color(0.08f, 0.14f, 0.25f));
+
+            GameObject textObject = new GameObject("Systems Board Text");
+            textObject.transform.SetParent(board.transform);
+            textObject.transform.localPosition = new Vector3(-2.05f, 1.05f, -0.25f);
+            TextMesh text = textObject.AddComponent<TextMesh>();
+            text.text = "XIV\nSYSTEMS\n\nXIV          BUILDING\nMALOSOUND    MUSIC\nGREEN MACHINE  DATA\n\nLOCAL / EDITABLE";
+            text.anchor = TextAnchor.UpperLeft;
+            text.alignment = TextAlignment.Left;
+            text.characterSize = 0.19f;
+            text.fontSize = 42;
+            text.color = Color.white;
+
+            XIVSystemsBoard systemsBoard = board.AddComponent<XIVSystemsBoard>();
+            SerializedObject serialized = new SerializedObject(systemsBoard);
             serialized.FindProperty("display").objectReferenceValue = text;
             serialized.ApplyModifiedPropertiesWithoutUndo();
         }
